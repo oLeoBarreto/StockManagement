@@ -4,6 +4,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -14,7 +15,7 @@ public class AbstractDomain {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     public String id;
-    @CreatedDate
+    @CreationTimestamp
     public Date createdAt;
     @UpdateTimestamp
     public Date updatedAt;

@@ -1,5 +1,7 @@
 package com.barreto.stockmanagement.infra.DTOs;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.math.BigDecimal;
