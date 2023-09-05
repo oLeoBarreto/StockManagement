@@ -4,6 +4,7 @@ import com.barreto.stockmanagement.domains.Product;
 import com.barreto.stockmanagement.infra.DTOs.ProductPostRequestBody;
 import com.barreto.stockmanagement.infra.DTOs.ProductPutRequestBody;
 import com.barreto.stockmanagement.services.product.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,12 +39,12 @@ public class ProductController implements ProductControllerProps{
     }
 
     @PostMapping()
-    public ResponseEntity<Product> saveNewProduct(@RequestBody ProductPostRequestBody product) {
+    public ResponseEntity<Product> saveNewProduct(@RequestBody @Valid ProductPostRequestBody product) {
         return new ResponseEntity<>(productService.saveProduct(product), HttpStatus.CREATED);
     }
 
     @PutMapping()
-    public ResponseEntity<Product> updateProduct(@RequestBody ProductPutRequestBody product) {
+    public ResponseEntity<Product> updateProduct(@RequestBody @Valid ProductPutRequestBody product) {
         return new ResponseEntity<>(productService.updateProduct(product), HttpStatus.OK);
     }
 

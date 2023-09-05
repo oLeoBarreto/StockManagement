@@ -31,7 +31,7 @@ public class ProductService implements ProductServiceProps {
     }
 
     public Product getProductById(String id) {
-        return repository.findById(id).orElseThrow(() -> new BadRequestException("ID not found!"));
+        return repository.findById(id).orElseThrow(() -> new BadRequestException("Product ID not found!"));
     }
 
     @Transactional

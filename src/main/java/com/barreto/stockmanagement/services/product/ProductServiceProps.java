@@ -7,11 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ProductServiceProps {
-    public Page<Product> listAllProducts(Pageable pageable);
-    public Page<Product> getProductByCategory(Pageable pageable, String category);
-    public Page<Product> getProductBySupplier(Pageable pageable, String supplier);
-    public Product getProductById(String id);
-    public Product saveProduct(ProductPostRequestBody product);
-    public Product updateProduct(ProductPutRequestBody product);
-    public void deleteProduct(String id);
+     Page<Product> listAllProducts(Pageable pageable);
+     Page<Product> getProductByCategory(Pageable pageable, String category);
+     Page<Product> getProductBySupplier(Pageable pageable, String supplier);
+     Product getProductById(String id);
+     Product saveProduct(ProductPostRequestBody product);
+     Product updateProduct(ProductPutRequestBody product);
+     void deleteProduct(String id);
 }
