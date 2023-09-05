@@ -1,6 +1,7 @@
 package com.barreto.stockmanagement.services.inbound;
 
 import com.barreto.stockmanagement.domains.Inbound;
+import com.barreto.stockmanagement.domains.Product;
 import com.barreto.stockmanagement.infra.DTOs.InboundPostRequestBody;
 import com.barreto.stockmanagement.infra.DTOs.InboundPutRequestBody;
 import org.springframework.data.domain.Page;
@@ -10,6 +11,5 @@ public interface InboundServiceProps {
     Page<Inbound> listAll(Pageable pageable);
     Inbound findInboundById(String id);
     Inbound createInbound(InboundPostRequestBody inboundPostRequestBody);
-    Inbound updateInbound(InboundPutRequestBody inboundPutRequestBody);
     void deleteInbound(String id);
 }

@@ -38,4 +38,6 @@ public class Product extends AbstractDomain{
     @NotNull(message = "Category could not be null")
     @Size(min = 3, max = 200, message = "Category must be between 3 and 200 characters")
     public String category;
+
+    public Float stockQuantity = 0F;
 }

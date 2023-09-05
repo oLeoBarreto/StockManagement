@@ -1,4 +1,4 @@
-package com.barreto.stockmanagement.controller;
+package com.barreto.stockmanagement.controller.products;
 
 import com.barreto.stockmanagement.domains.Product;
 import com.barreto.stockmanagement.infra.DTOs.ProductPostRequestBody;

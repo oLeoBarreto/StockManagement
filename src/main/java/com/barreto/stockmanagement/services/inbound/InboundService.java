@@ -4,7 +4,6 @@ import com.barreto.stockmanagement.domains.Inbound;
 import com.barreto.stockmanagement.domains.Product;
 import com.barreto.stockmanagement.exceptions.BadRequestException;
 import com.barreto.stockmanagement.infra.DTOs.InboundPostRequestBody;
-import com.barreto.stockmanagement.infra.DTOs.InboundPutRequestBody;
 import com.barreto.stockmanagement.infra.database.repository.InboundRepository;
 import com.barreto.stockmanagement.services.product.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -29,20 +28,17 @@ public class InboundService implements InboundServiceProps{
     public Inbound createInbound(InboundPostRequestBody inboundPostRequestBody) {
         Product product = productService.getProductById(inboundPostRequestBody.getProductId());
         Inbound inbound = new Inbound(product, inboundPostRequestBody.getQuantity());
+        product.setStockQuantity(product.getStockQuantity() + inbound.getQuantity());
 
         return repository.save(inbound);
     }
 
-    public Inbound updateInbound(InboundPutRequestBody inboundPutRequestBody) {
-        Product product = productService.getProductById(inboundPutRequestBody.getProductId());
-        Inbound findInbound = findInboundById(inboundPutRequestBody.getInboundId());
-
-        findInbound.setQuantity(inboundPutRequestBody.getQuantity());
-        findInbound.setProduct(product);
-        return repository.save(findInbound);
-    }
-
     public void deleteInbound(String id) {
-        repository.delete(findInboundById(id));
+        Inbound inbound = findInboundById(id);
+        Product product = inbound.getProduct();
+
+        product.setStockQuantity(product.getStockQuantity() - inbound.getQuantity());
+
+        repository.delete(inbound);
     }
 }

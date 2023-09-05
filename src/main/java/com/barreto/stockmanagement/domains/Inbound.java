@@ -3,9 +3,8 @@ package com.barreto.stockmanagement.domains;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +22,6 @@ public class Inbound extends AbstractDomain{
     private Product product;
 
     @NotNull(message = "Quantity could not be null")
-    @PositiveOrZero(message = "Quantity price must be a positive value")
+    @Positive(message = "Quantity price must be more than 0")
     private Float quantity;
 }
