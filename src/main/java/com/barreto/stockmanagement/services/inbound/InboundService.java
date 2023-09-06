@@ -26,7 +26,7 @@ public class InboundService implements InboundServiceProps{
     }
 
     public Inbound createInbound(InboundPostRequestBody inboundPostRequestBody) {
-        Product product = productService.getProductById(inboundPostRequestBody.getProductId());
+        Product product = productService.findProductById(inboundPostRequestBody.getProductId());
         Inbound inbound = new Inbound(product, inboundPostRequestBody.getQuantity());
         product.setStockQuantity(product.getStockQuantity() + inbound.getQuantity());
 

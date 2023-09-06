@@ -25,26 +25,26 @@ public class ProductController implements ProductControllerProps{
 
     @GetMapping("findByCategory")
     public ResponseEntity<Page<Product>> getProductByCategory(Pageable pageable, @RequestParam String category) {
-        return new ResponseEntity<>(productService.getProductByCategory(pageable, category), HttpStatus.FOUND);
+        return new ResponseEntity<>(productService.findProductByCategory(pageable, category), HttpStatus.FOUND);
     }
 
     @GetMapping("findBySupplier")
-    public ResponseEntity<Page<Product>>  getProductBySupplier(Pageable pageable, @RequestParam String supplier) {
-        return new ResponseEntity<>(productService.getProductBySupplier(pageable, supplier), HttpStatus.FOUND);
+    public ResponseEntity<Page<Product>> getProductBySupplier(Pageable pageable, @RequestParam String supplier) {
+        return new ResponseEntity<>(productService.findProductBySupplier(pageable, supplier), HttpStatus.FOUND);
     }
 
     @GetMapping("findById")
     public ResponseEntity<Product> getProductById(@RequestParam String id) {
-        return new ResponseEntity<>(productService.getProductById(id), HttpStatus.FOUND);
+        return new ResponseEntity<>(productService.findProductById(id), HttpStatus.FOUND);
     }
 
     @PostMapping()
-    public ResponseEntity<Product> saveNewProduct(@RequestBody @Valid ProductPostRequestBody product) {
-        return new ResponseEntity<>(productService.saveProduct(product), HttpStatus.CREATED);
+    public ResponseEntity<Product> postNewProduct(@RequestBody @Valid ProductPostRequestBody product) {
+        return new ResponseEntity<>(productService.createNewProduct(product), HttpStatus.CREATED);
     }
 
     @PutMapping()
-    public ResponseEntity<Product> updateProduct(@RequestBody @Valid ProductPutRequestBody product) {
+    public ResponseEntity<Product> putProduct(@RequestBody @Valid ProductPutRequestBody product) {
         return new ResponseEntity<>(productService.updateProduct(product), HttpStatus.OK);
     }
 

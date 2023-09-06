@@ -8,10 +8,10 @@ import org.springframework.data.domain.Pageable;
 
 public interface ProductServiceProps {
      Page<Product> listAllProducts(Pageable pageable);
-     Page<Product> getProductByCategory(Pageable pageable, String category);
-     Page<Product> getProductBySupplier(Pageable pageable, String supplier);
-     Product getProductById(String id);
-     Product saveProduct(ProductPostRequestBody product);
+     Page<Product> findProductByCategory(Pageable pageable, String category);
+     Page<Product> findProductBySupplier(Pageable pageable, String supplier);
+     Product findProductById(String id);
+     Product createNewProduct(ProductPostRequestBody product);
      Product updateProduct(ProductPutRequestBody product);
      void deleteProduct(String id);
 }

@@ -6,11 +6,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
-public class InboundPutRequestBody {
-    @NotNull(message = "Inbound ID could not be null")
-    @NotEmpty(message = "Inbound ID could not be empty")
-    private String inboundId;
-
+public class OutboundPostRequestBody {
     @NotNull(message = "Quantity could not be null")
     @Positive(message = "Quantity price must be more than 0")
     private Float quantity;

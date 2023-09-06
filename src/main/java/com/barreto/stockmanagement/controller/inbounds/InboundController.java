@@ -2,7 +2,6 @@ package com.barreto.stockmanagement.controller.inbounds;
 
 import com.barreto.stockmanagement.domains.Inbound;
 import com.barreto.stockmanagement.infra.DTOs.InboundPostRequestBody;
-import com.barreto.stockmanagement.infra.DTOs.InboundPutRequestBody;
 import com.barreto.stockmanagement.services.inbound.InboundService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,7 @@ public class InboundController implements InboundControllerProps{
     }
 
     @PostMapping()
-    public ResponseEntity<Inbound> createNewInbound(@RequestBody @Valid InboundPostRequestBody inboundPostRequestBody) {
+    public ResponseEntity<Inbound> postNewInbound(@RequestBody @Valid InboundPostRequestBody inboundPostRequestBody) {
         return new ResponseEntity<>(inboundService.createInbound(inboundPostRequestBody), HttpStatus.CREATED);
     }
 

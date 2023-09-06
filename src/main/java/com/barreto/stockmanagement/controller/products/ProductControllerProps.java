@@ -12,7 +12,7 @@ public interface ProductControllerProps {
      ResponseEntity<Page<Product>> getProductByCategory(Pageable pageable, String category);
      ResponseEntity<Page<Product>> getProductBySupplier(Pageable pageable, String supplier);
      ResponseEntity<Product> getProductById(String id);
-     ResponseEntity<Product> saveNewProduct(ProductPostRequestBody product);
-     ResponseEntity<Product> updateProduct(ProductPutRequestBody product);
+     ResponseEntity<Product> postNewProduct(ProductPostRequestBody product);
+     ResponseEntity<Product> putProduct(ProductPutRequestBody product);
      ResponseEntity<Void> deleteProduct(String id);
 }

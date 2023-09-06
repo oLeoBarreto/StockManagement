@@ -22,25 +22,25 @@ public class ProductService implements ProductServiceProps {
         return repository.findAll(pageable);
     }
 
-    public Page<Product> getProductByCategory(Pageable pageable, String category) {
+    public Page<Product> findProductByCategory(Pageable pageable, String category) {
         return repository.findByCategory(pageable, category);
     }
 
-    public Page<Product> getProductBySupplier(Pageable pageable, String supplier) {
+    public Page<Product> findProductBySupplier(Pageable pageable, String supplier) {
         return repository.findBySupplier(pageable, supplier);
     }
 
-    public Product getProductById(String id) {
+    public Product findProductById(String id) {
         return repository.findById(id).orElseThrow(() -> new BadRequestException("Product ID not found!"));
     }
 
     @Transactional
-    public Product saveProduct(ProductPostRequestBody product) {
+    public Product createNewProduct(ProductPostRequestBody product) {
         return repository.save(ProductMapper.INSTANCE.toProduct(product));
     }
 
     public Product updateProduct(ProductPutRequestBody product) {
-        Product findProduct = getProductById(product.getId());
+        Product findProduct = findProductById(product.getId());
         findProduct.setName(product.getName());
         findProduct.setDescription(product.getDescription());
         findProduct.setUnitPrice(product.getUnitPrice());
@@ -51,6 +51,6 @@ public class ProductService implements ProductServiceProps {
     }
 
     public void deleteProduct(String id) {
-        repository.delete(getProductById(id));
+        repository.delete(findProductById(id));
     }
 }
