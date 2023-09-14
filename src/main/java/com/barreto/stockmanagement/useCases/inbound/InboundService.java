@@ -1,11 +1,11 @@
-package com.barreto.stockmanagement.services.inbound;
+package com.barreto.stockmanagement.useCases.inbound;
 
 import com.barreto.stockmanagement.domains.Inbound;
 import com.barreto.stockmanagement.domains.Product;
-import com.barreto.stockmanagement.exceptions.BadRequestException;
-import com.barreto.stockmanagement.infra.DTOs.InboundPostRequestBody;
+import com.barreto.stockmanagement.infra.exceptions.BadRequestException;
+import com.barreto.stockmanagement.infra.DTOs.inbound.InboundPostRequestBody;
 import com.barreto.stockmanagement.infra.database.repository.InboundRepository;
-import com.barreto.stockmanagement.services.product.ProductService;
+import com.barreto.stockmanagement.useCases.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class InboundService implements InboundServiceProps{
+public class InboundService implements InboundUseCase {
     private final InboundRepository repository;
     private final ProductService productService;
 

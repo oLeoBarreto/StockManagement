@@ -1,10 +1,10 @@
-package com.barreto.stockmanagement.services.product;
+package com.barreto.stockmanagement.useCases.product;
 
 import com.barreto.stockmanagement.domains.Product;
-import com.barreto.stockmanagement.exceptions.BadRequestException;
+import com.barreto.stockmanagement.infra.exceptions.BadRequestException;
 import com.barreto.stockmanagement.infra.DTOs.Mappers.ProductMapper;
-import com.barreto.stockmanagement.infra.DTOs.ProductPostRequestBody;
-import com.barreto.stockmanagement.infra.DTOs.ProductPutRequestBody;
+import com.barreto.stockmanagement.infra.DTOs.product.ProductPostRequestBody;
+import com.barreto.stockmanagement.infra.DTOs.product.ProductPutRequestBody;
 import com.barreto.stockmanagement.infra.database.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService implements ProductServiceProps {
+public class ProductService implements ProductUseCase {
 
     private final ProductRepository repository;
 

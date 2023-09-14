@@ -1,9 +1,9 @@
-package com.barreto.stockmanagement.handler;
+package com.barreto.stockmanagement.infra.handlers;
 
-import com.barreto.stockmanagement.exceptions.BadRequestException;
-import com.barreto.stockmanagement.exceptions.BadRequestExceptionDetail;
-import com.barreto.stockmanagement.exceptions.DefaultExceptionDetails;
-import com.barreto.stockmanagement.exceptions.ValidationExceptionDetail;
+import com.barreto.stockmanagement.infra.exceptions.BadRequestException;
+import com.barreto.stockmanagement.infra.exceptions.BadRequestExceptionDetail;
+import com.barreto.stockmanagement.infra.exceptions.DefaultExceptionDetails;
+import com.barreto.stockmanagement.infra.exceptions.ValidationExceptionDetail;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;

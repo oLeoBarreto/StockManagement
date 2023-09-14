@@ -1,4 +1,4 @@
-package com.barreto.stockmanagement.exceptions;
+package com.barreto.stockmanagement.infra.exceptions;
 
 import lombok.Data;
 import lombok.experimental.SuperBuilder;

@@ -1,4 +1,4 @@
-package com.barreto.stockmanagement.infra.DTOs;
+package com.barreto.stockmanagement.infra.DTOs.product;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

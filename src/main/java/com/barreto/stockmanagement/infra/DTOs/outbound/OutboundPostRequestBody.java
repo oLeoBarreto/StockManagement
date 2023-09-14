@@ -1,4 +1,4 @@
-package com.barreto.stockmanagement.infra.DTOs;
+package com.barreto.stockmanagement.infra.DTOs.outbound;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
-public class InboundPostRequestBody {
+public class OutboundPostRequestBody {
     @NotNull(message = "Quantity could not be null")
     @Positive(message = "Quantity price must be more than 0")
     private Float quantity;

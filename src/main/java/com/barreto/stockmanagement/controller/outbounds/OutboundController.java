@@ -1,8 +1,8 @@
-package com.barreto.stockmanagement.controller.outbound;
+package com.barreto.stockmanagement.controller.outbounds;
 
 import com.barreto.stockmanagement.domains.Outbound;
-import com.barreto.stockmanagement.infra.DTOs.OutboundPostRequestBody;
-import com.barreto.stockmanagement.services.outbound.OutboundService;
+import com.barreto.stockmanagement.infra.DTOs.outbound.OutboundPostRequestBody;
+import com.barreto.stockmanagement.useCases.outbound.OutboundService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("outbounds")
 @RequiredArgsConstructor
-public class OutboundController implements OutboundControllerProps {
+public class OutboundController implements OutboundEndpoints {
     private final OutboundService outboundService;
 
     @GetMapping()

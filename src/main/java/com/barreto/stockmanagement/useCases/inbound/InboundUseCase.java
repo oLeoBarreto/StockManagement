@@ -1,11 +1,11 @@
-package com.barreto.stockmanagement.services.inbound;
+package com.barreto.stockmanagement.useCases.inbound;
 
 import com.barreto.stockmanagement.domains.Inbound;
-import com.barreto.stockmanagement.infra.DTOs.InboundPostRequestBody;
+import com.barreto.stockmanagement.infra.DTOs.inbound.InboundPostRequestBody;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface InboundServiceProps {
+public interface InboundUseCase {
     Page<Inbound> listAll(Pageable pageable);
     Inbound findInboundById(String id);
     Inbound createInbound(InboundPostRequestBody inboundPostRequestBody);

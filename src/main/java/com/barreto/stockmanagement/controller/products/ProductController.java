@@ -1,9 +1,9 @@
 package com.barreto.stockmanagement.controller.products;
 
 import com.barreto.stockmanagement.domains.Product;
-import com.barreto.stockmanagement.infra.DTOs.ProductPostRequestBody;
-import com.barreto.stockmanagement.infra.DTOs.ProductPutRequestBody;
-import com.barreto.stockmanagement.services.product.ProductService;
+import com.barreto.stockmanagement.infra.DTOs.product.ProductPostRequestBody;
+import com.barreto.stockmanagement.infra.DTOs.product.ProductPutRequestBody;
+import com.barreto.stockmanagement.useCases.product.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("products")
 @RequiredArgsConstructor
-public class ProductController implements ProductControllerProps{
+public class ProductController implements ProductEndpoints {
     private final ProductService productService;
 
     @GetMapping()

@@ -1,8 +1,8 @@
 package com.barreto.stockmanagement.controller.inbounds;
 
 import com.barreto.stockmanagement.domains.Inbound;
-import com.barreto.stockmanagement.infra.DTOs.InboundPostRequestBody;
-import com.barreto.stockmanagement.services.inbound.InboundService;
+import com.barreto.stockmanagement.infra.DTOs.inbound.InboundPostRequestBody;
+import com.barreto.stockmanagement.useCases.inbound.InboundService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("inbounds")
 @RequiredArgsConstructor
-public class InboundController implements InboundControllerProps{
+public class InboundController implements InboundEndpoints {
 
     private final InboundService inboundService;
 

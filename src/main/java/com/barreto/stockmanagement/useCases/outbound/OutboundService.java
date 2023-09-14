@@ -1,11 +1,11 @@
-package com.barreto.stockmanagement.services.outbound;
+package com.barreto.stockmanagement.useCases.outbound;
 
 import com.barreto.stockmanagement.domains.Outbound;
 import com.barreto.stockmanagement.domains.Product;
-import com.barreto.stockmanagement.exceptions.BadRequestException;
-import com.barreto.stockmanagement.infra.DTOs.OutboundPostRequestBody;
+import com.barreto.stockmanagement.infra.exceptions.BadRequestException;
+import com.barreto.stockmanagement.infra.DTOs.outbound.OutboundPostRequestBody;
 import com.barreto.stockmanagement.infra.database.repository.OutboundRepository;
-import com.barreto.stockmanagement.services.product.ProductService;
+import com.barreto.stockmanagement.useCases.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class OutboundService implements OutboundServiceProps{
+public class OutboundService implements OutboundUseCase {
     private final OutboundRepository repository;
     private final ProductService productService;
 

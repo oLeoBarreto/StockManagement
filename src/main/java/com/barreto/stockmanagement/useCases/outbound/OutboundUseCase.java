@@ -1,11 +1,11 @@
-package com.barreto.stockmanagement.services.outbound;
+package com.barreto.stockmanagement.useCases.outbound;
 
 import com.barreto.stockmanagement.domains.Outbound;
-import com.barreto.stockmanagement.infra.DTOs.OutboundPostRequestBody;
+import com.barreto.stockmanagement.infra.DTOs.outbound.OutboundPostRequestBody;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface OutboundServiceProps {
+public interface OutboundUseCase {
     Page<Outbound> listAll(Pageable pageable);
     Outbound findOutboundById(String id);
     Outbound createNewOutbound(OutboundPostRequestBody outboundPostRequestBody);

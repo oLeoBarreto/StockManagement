@@ -1,4 +1,4 @@
-package com.barreto.stockmanagement.exceptions;
+package com.barreto.stockmanagement.infra.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

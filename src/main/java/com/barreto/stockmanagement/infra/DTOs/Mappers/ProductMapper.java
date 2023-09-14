@@ -1,6 +1,6 @@
 package com.barreto.stockmanagement.infra.DTOs.Mappers;
 
-import com.barreto.stockmanagement.infra.DTOs.ProductPostRequestBody;
+import com.barreto.stockmanagement.infra.DTOs.product.ProductPostRequestBody;
 import com.barreto.stockmanagement.domains.Product;
 import org.springframework.stereotype.Component;
 
