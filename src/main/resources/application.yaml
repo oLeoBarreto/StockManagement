@@ -1,11 +1,14 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testDatabase
-    username: h2
-    password: testDatabase
-    driverClassName: org.h2.Driver
+    url: jdbc:postgresql://localhost:5432/StockManagement
+    username: postgres
+    password: docker
+    driver-class-name: org.postgresql.Driver
   jpa:
-    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
-  h2:
-    console.enabled: true
+    hibernate:
+      ddl-auto: update
 
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET:my-secret-key}

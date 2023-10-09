@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  db:
+    image: "postgres"
+    container_name: "postgres_db_container"
+    restart: always
+    tty: true
+    ports:
+      - "5432:5432"
+    volumes:
+      - .docker/dbdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=StockManagement
