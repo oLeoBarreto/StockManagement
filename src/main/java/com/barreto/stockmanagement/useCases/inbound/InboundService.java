@@ -26,8 +26,8 @@ public class InboundService implements InboundUseCase {
     }
 
     public Inbound createInbound(InboundPostRequestBody inboundPostRequestBody) {
-        Product product = productService.findProductById(inboundPostRequestBody.getProductId());
-        Inbound inbound = new Inbound(product, inboundPostRequestBody.getQuantity());
+        Product product = productService.findProductById(inboundPostRequestBody.productId());
+        Inbound inbound = new Inbound(product, inboundPostRequestBody.quantity());
         product.setStockQuantity(product.getStockQuantity() + inbound.getQuantity());
 
         return repository.save(inbound);

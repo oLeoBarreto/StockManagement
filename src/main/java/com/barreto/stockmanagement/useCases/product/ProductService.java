@@ -40,12 +40,12 @@ public class ProductService implements ProductUseCase {
     }
 
     public Product updateProduct(ProductPutRequestBody product) {
-        Product findProduct = findProductById(product.getId());
-        findProduct.setName(product.getName());
-        findProduct.setDescription(product.getDescription());
-        findProduct.setUnitPrice(product.getUnitPrice());
-        findProduct.setSupplier(product.getSupplier());
-        findProduct.setCategory(product.getCategory());
+        Product findProduct = findProductById(product.id());
+        findProduct.setName(product.name());
+        findProduct.setDescription(product.description());
+        findProduct.setUnitPrice(product.unitPrice());
+        findProduct.setSupplier(product.supplier());
+        findProduct.setCategory(product.category());
 
         return repository.save(findProduct);
     }

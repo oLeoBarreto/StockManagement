@@ -1,10 +1,5 @@
 package com.barreto.stockmanagement.infra.DTOs.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+public record UserLoginResponseBody(String token) {
 
-@Data
-@AllArgsConstructor
-public class UserLoginResponseBody {
-    private String token;
 }

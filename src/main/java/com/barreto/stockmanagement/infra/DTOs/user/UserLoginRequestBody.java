@@ -1,9 +1,5 @@
 package com.barreto.stockmanagement.infra.DTOs.user;
 
-import lombok.Data;
+public record UserLoginRequestBody(String login, String password) {
 
-@Data
-public class UserLoginRequestBody {
-    private String login;
-    private String password;
 }

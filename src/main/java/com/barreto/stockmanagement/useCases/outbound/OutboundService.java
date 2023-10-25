@@ -26,10 +26,10 @@ public class OutboundService implements OutboundUseCase {
     }
 
     public Outbound createNewOutbound(OutboundPostRequestBody outboundPostRequestBody) {
-        Product product = productService.findProductById(outboundPostRequestBody.getProductId());
-        Outbound outbound = new Outbound(product, outboundPostRequestBody.getQuantity());
+        Product product = productService.findProductById(outboundPostRequestBody.productId());
+        Outbound outbound = new Outbound(product, outboundPostRequestBody.quantity());
 
-        product.setStockQuantity(product.getStockQuantity() - outboundPostRequestBody.getQuantity());
+        product.setStockQuantity(product.getStockQuantity() - outboundPostRequestBody.quantity());
 
         return repository.save(outbound);
     }

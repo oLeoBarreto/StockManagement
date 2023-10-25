@@ -20,29 +20,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("auth")
 @RequiredArgsConstructor
 public class AuthorizationController implements AuthorizationEndpoints {
     private final AuthenticationManager authenticationManager;
     private final UserRepository repository;
     private final TokenManageService tokenManageService;
 
-    @PostMapping("/login")
+    @PostMapping("login")
     public ResponseEntity<UserLoginResponseBody> login(@RequestBody @Valid UserLoginRequestBody user) {
-        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword());
+        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(user.login(), user.password());
         Authentication authenticate = this.authenticationManager.authenticate(usernamePassword);
 
         return new ResponseEntity<>(new UserLoginResponseBody(tokenManageService.generateToken((User) authenticate.getPrincipal())), HttpStatus.OK);
     }
 
-    @PostMapping("/register")
+    @PostMapping("register")
     public ResponseEntity<User> register(@RequestBody @Valid UserRegisterRequestBody user) {
-        if (this.repository.findByLogin(user.getLogin()) != null) {
+        if (this.repository.findByLogin(user.login()) != null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        String encodedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
-        User createUser = new User(user.getLogin(), encodedPassword, user.getRole());
+        String encodedPassword = new BCryptPasswordEncoder().encode(user.password());
+        User createUser = new User(user.login(), encodedPassword, user.role());
 
         return new ResponseEntity<>(this.repository.save(createUser), HttpStatus.CREATED);
     }

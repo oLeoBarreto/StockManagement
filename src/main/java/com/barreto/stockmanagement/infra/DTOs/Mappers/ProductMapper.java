@@ -10,11 +10,11 @@ public class ProductMapper {
     public Product toProduct(ProductPostRequestBody productPostRequestBody) {
         Product product = new Product();
 
-        product.setName(productPostRequestBody.getName());
-        product.setDescription(productPostRequestBody.getDescription());
-        product.setUnitPrice(productPostRequestBody.getUnitPrice());
-        product.setSupplier(productPostRequestBody.getSupplier());
-        product.setCategory(productPostRequestBody.getCategory());
+        product.setName(productPostRequestBody.name());
+        product.setDescription(productPostRequestBody.description());
+        product.setUnitPrice(productPostRequestBody.unitPrice());
+        product.setSupplier(productPostRequestBody.supplier());
+        product.setCategory(productPostRequestBody.category());
 
         return product;
     }
