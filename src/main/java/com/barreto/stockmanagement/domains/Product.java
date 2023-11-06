@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 @Setter
 @Builder
 public class Product extends AbstractDomain{
+
     @NotEmpty(message = "Name could not be empty")
     @NotNull(message = "Name could not be null")
     public String name;
