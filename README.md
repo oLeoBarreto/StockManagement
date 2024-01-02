@@ -8,6 +8,9 @@ Para rodar esse projeto, é necessário indicar um sercret para os tokens JWT na
 
 `JWT_SECRET`
 
+Também é possivel setar a porta que a aplicação irá rodar através da variável
+
+`SERVER_PORT`
 
 ## Documentação da API
 
