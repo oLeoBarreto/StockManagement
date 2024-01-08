@@ -9,7 +9,25 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - .docker/dbdata:/var/lib/postgresql/data
+      - .docker/postgres/data/:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=docker
       - POSTGRES_DB=StockManagement
+    networks:
+      - stock_management
+
+  rabbitmq:
+    image: rabbitmq:3.12.11-management-alpine
+    container_name: "rabbitmq_management_container"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - .docker/rabbitmq/data/:/var/lib/rabbitmq/
+      - .docker/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - stock_management
+
+networks:
+  stock_management:
+    driver: bridge
