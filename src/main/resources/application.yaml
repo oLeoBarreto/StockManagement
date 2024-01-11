@@ -12,6 +12,14 @@ spring:
       ddl-auto: update
   application:
     name: stock-management-api
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      direct:
+        auto-startup: true
 
 api:
   security:

@@ -22,15 +22,17 @@ import java.util.regex.Pattern;
 public class User extends AbstractDomain implements UserDetails {
     private String login;
     private String password;
+    private String name;
     private UserRole role;
 
-    public User(String login, String password, UserRole role) {
+    public User(String login, String password, String name, UserRole role) {
         if (!IsValidEmail(login)) {
             throw new BadRequestException("This is a not valid email!");
         }
 
         this.login = login;
         this.password = password;
+        this.name = name;
         this.role = role;
     }
 

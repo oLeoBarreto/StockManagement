@@ -4,8 +4,11 @@ import com.barreto.stockmanagement.domains.user.User;
 import com.barreto.stockmanagement.infra.DTOs.user.UserLoginRequestBody;
 import com.barreto.stockmanagement.infra.DTOs.user.UserLoginResponseBody;
 import com.barreto.stockmanagement.infra.DTOs.user.UserRegisterRequestBody;
+import com.barreto.stockmanagement.infra.DTOs.user.UserSendWelcomeMailBody;
 import com.barreto.stockmanagement.infra.config.token.TokenManageService;
 import com.barreto.stockmanagement.infra.database.repository.UserRepository;
+import com.barreto.stockmanagement.useCases.user.SendMailService;
+import com.barreto.stockmanagement.useCases.user.UserUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +29,7 @@ public class AuthorizationController implements AuthorizationEndpoints {
     private final AuthenticationManager authenticationManager;
     private final UserRepository repository;
     private final TokenManageService tokenManageService;
+    private final UserUseCase userUseCase;
 
     @PostMapping("login")
     public ResponseEntity<UserLoginResponseBody> login(@RequestBody @Valid UserLoginRequestBody user) {
@@ -42,7 +46,9 @@ public class AuthorizationController implements AuthorizationEndpoints {
         }
 
         String encodedPassword = new BCryptPasswordEncoder().encode(user.password());
-        User createUser = new User(user.login(), encodedPassword, user.role());
+        User createUser = new User(user.login(), encodedPassword, user.name(), user.role());
+
+        userUseCase.sendWelcomeMail(new UserSendWelcomeMailBody(user.login(), user.name()));
 
         return new ResponseEntity<>(this.repository.save(createUser), HttpStatus.CREATED);
     }
