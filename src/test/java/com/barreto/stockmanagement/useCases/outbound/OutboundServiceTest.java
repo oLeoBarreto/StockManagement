@@ -47,6 +47,7 @@ class OutboundServiceTest {
                 new BigDecimal(1),
                 "test supplier",
                 "test",
+                null,
                 1F
         );
         product.id = "productId";

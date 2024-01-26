@@ -42,6 +42,7 @@ class ProductServiceTest {
                 new BigDecimal(1),
                 "test supplier",
                 "test",
+                null,
                 1F
         );
         product.id = "productId";
@@ -76,7 +77,7 @@ class ProductServiceTest {
         Product product = productService.createNewProduct(productRequestBody);
 
         assertNotNull(product);
-        assertEquals(product.name, productRequestBody.name());
+        assertEquals(product.getName(), productRequestBody.name());
     }
 
     @Test
