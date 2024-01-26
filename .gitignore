@@ -34,3 +34,6 @@ build/
 
 ### Docker ###
 .docker
+
+### images ###
+/src/main/resources/static/images
