@@ -3,7 +3,8 @@ package com.barreto.stockmanagement.controller.products;
 import com.barreto.stockmanagement.domains.Product;
 import com.barreto.stockmanagement.infra.DTOs.product.ProductPostRequestBody;
 import com.barreto.stockmanagement.infra.DTOs.product.ProductPutRequestBody;
-import com.barreto.stockmanagement.useCases.product.ProductService;
+import com.barreto.stockmanagement.useCases.product.ProductImageUseCase;
+import com.barreto.stockmanagement.useCases.product.ProductUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,7 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductController implements ProductEndpoints {
-    private final ProductService productService;
+    private final ProductUseCase productService;
+    private final ProductImageUseCase productImageService;
 
     @GetMapping()
     public ResponseEntity<Page<Product>> getProductsLists(Pageable pageable) {
@@ -42,7 +44,7 @@ public class ProductController implements ProductEndpoints {
 
     @GetMapping("/image/download")
     public ResponseEntity<byte[]> getProductImage(@RequestParam String productId) {
-        return ResponseEntity.status(HttpStatus.FOUND).contentType(MediaType.valueOf("image/png")).body(productService.findProductImage(productId));
+        return ResponseEntity.status(HttpStatus.FOUND).contentType(MediaType.valueOf("image/png")).body(productImageService.findProductImage(productId));
     }
 
     @PostMapping()
@@ -52,7 +54,7 @@ public class ProductController implements ProductEndpoints {
 
     @PostMapping("/image/upload")
     public ResponseEntity<Product> postProductImage(@RequestParam String productId,@RequestParam MultipartFile imageFile) {
-        return new ResponseEntity<>(productService.saveProductImage(productId, imageFile), HttpStatus.OK);
+        return new ResponseEntity<>(productImageService.saveProductImage(productId, imageFile), HttpStatus.OK);
     }
 
     @PutMapping()
@@ -68,7 +70,7 @@ public class ProductController implements ProductEndpoints {
 
     @DeleteMapping("/image")
     public ResponseEntity<Void> deleteProductImage(String productId) {
-        productService.deleteProductImage(productId);
+        productImageService.deleteProductImage(productId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
