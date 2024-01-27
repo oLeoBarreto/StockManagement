@@ -37,3 +37,4 @@ build/
 
 ### images ###
 /src/main/resources/static/images
+/src/test/resources/static/images

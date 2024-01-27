@@ -3,6 +3,7 @@ package com.barreto.stockmanagement.controller.products;
 import com.barreto.stockmanagement.domains.Product;
 import com.barreto.stockmanagement.infra.DTOs.product.ProductPostRequestBody;
 import com.barreto.stockmanagement.infra.DTOs.product.ProductPutRequestBody;
+import com.barreto.stockmanagement.useCases.product.ProductImageService;
 import com.barreto.stockmanagement.useCases.product.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,8 +17,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,6 +34,9 @@ class ProductControllerTest {
     @Mock
     private ProductService productService;
 
+    @Mock
+    private ProductImageService productImageService;
+
     @InjectMocks
     private ProductController productController;
 
@@ -41,7 +48,7 @@ class ProductControllerTest {
                 new BigDecimal(1),
                 "test supplier",
                 "test",
-                null,
+                "image-productId.jpeg",
                 1F
         );
         product.id = "productId";
@@ -55,6 +62,10 @@ class ProductControllerTest {
         when(productService.findProductByCategory(any(Pageable.class), anyString())).thenReturn(productPage);
         when(productService.listAllProducts(any(Pageable.class))).thenReturn(productPage);
         doNothing().when(productService).deleteProduct(anyString());
+
+        when(productImageService.saveProductImage(anyString(), any(MultipartFile.class))).thenReturn(product);
+        when(productImageService.findProductImage(anyString())).thenReturn(product.getImage().getBytes());
+        doNothing().when(productImageService).deleteProductImage(anyString());
 
         MockitoAnnotations.openMocks(this);
     }
@@ -143,5 +154,34 @@ class ProductControllerTest {
 
         assertDoesNotThrow(() -> productController.deleteProduct("productId"));
         assertEquals(HttpStatus.NO_CONTENT, product.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("Should upload a image to a product")
+    void testUploadProductImage() {
+        MultipartFile imageFile = new MockMultipartFile(
+                "product-image.png", "product-image.png", MediaType.IMAGE_PNG_VALUE,"image.png".getBytes());
+        ResponseEntity<Product> product = productController.postProductImage("productId", imageFile);
+
+        assertNotNull(product.getBody());
+        assertEquals(HttpStatus.OK, product.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("Should download the product image")
+    void testDownloadProductImage() {
+        ResponseEntity<byte[]> product = productController.getProductImage("productId");
+
+        assertNotNull(product.getBody());
+        assertEquals(HttpStatus.FOUND, product.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("Should delete the product image")
+    void testDeleteProductImage() {
+        ResponseEntity<Void> product = productController.deleteProductImage("productId");
+
+        assertEquals(HttpStatus.NO_CONTENT, product.getStatusCode());
+        assertDoesNotThrow(() -> productController.deleteProductImage("productId"));
     }
 }
