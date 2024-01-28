@@ -12,6 +12,10 @@ Também é possivel setar a porta que a aplicação irá rodar através da vari�
 
 `SERVER_PORT`
 
+Para definir o caminho que irá armazenar as imagens basta setar a variável
+
+`UPLOAD_DIR`
+
 ## Documentação da API
 
 ### Autenticação
@@ -117,6 +121,37 @@ Também é possivel setar a porta que a aplicação irá rodar através da vari�
 | Parâmetro   | Tipo       | Descrição                                   |
 | :---------- | :--------- | :------------------------------------------ |
 | `id`      | `string` | **Obrigatório** Id do produto. |
+
+##
+#### Imagem do Produto
+```http
+  GET /products/image/download
+```
+
+| Parâmetro   | Tipo       | Descrição                      |
+| :---------- | :--------- |:-------------------------------|
+| `productId`      | `string` | **Obrigatório** ID do produto. |
+
+##
+```http
+  POST /products/image/upload
+```
+
+| Parâmetro   | Tipo        | Descrição                                     |
+| :---------- |:------------|:----------------------------------------------|
+| `productId`      | `string`    | **Obrigatório** ID do produto.                |
+| `imageFile`      | `multipart` | **Obrigatório** Arquivo de imagem do produto. |
+**Atenção:** apenas arquivos .jpeg  e .png são aceitos. 
+
+##
+```http
+  DEL /products/image
+```
+
+| Parâmetro   | Tipo       | Descrição                      |
+| :---------- | :--------- |:-------------------------------|
+| `productId`      | `string` | **Obrigatório** ID do produto. |
+
 
 ### Documentos de entrada
 
