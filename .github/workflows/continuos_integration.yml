@@ -1,0 +1,30 @@
+name: Java CI with Maven
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  BuildAndTestApplication:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup java JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build and Test Application
+        run: mvn --batch-mode --update-snapshots verify
+
+      - name: Generating Jar file
+        run: mkdir staging && cp target/*.jar staging
+        uses: actions/upload-artifact@v4
+        with:
+          name: Package
+          path: staging
