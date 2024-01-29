@@ -22,8 +22,10 @@ jobs:
       - name: Build and Test Application
         run: mvn --batch-mode --update-snapshots verify
 
-      - name: Generating Jar file
+      - name: Generating target path
         run: mkdir staging && cp target/*.jar staging
+
+      - name: Generating Jar file
         uses: actions/upload-artifact@v4
         with:
           name: Package
