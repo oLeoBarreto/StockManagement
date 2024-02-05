@@ -2,7 +2,6 @@ package com.barreto.stockmanagement.controller.inbounds;
 
 import com.barreto.stockmanagement.domains.Inbound;
 import com.barreto.stockmanagement.infra.DTOs.inbound.InboundPostRequestBody;
-;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
