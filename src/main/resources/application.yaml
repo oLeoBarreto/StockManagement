@@ -1,5 +1,9 @@
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${PORT:8080}
+  compression:
+    enabled: true
+    mime-types: application/json
+    min-response-size: 1024
 
 spring:
   datasource:
@@ -20,6 +24,8 @@ spring:
     listener:
       direct:
         auto-startup: true
+  jackson:
+    default-property-inclusion: non_null
 
 api:
   security:
