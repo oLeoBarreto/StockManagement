@@ -18,7 +18,7 @@ Para rodar esse projeto, é necessário indicar um sercret para os tokens JWT na
 
 Também é possivel setar a porta que a aplicação irá rodar através da variável
 
-`SERVER_PORT`
+`PORT`
 
 Para definir o caminho que irá armazenar as imagens basta setar a variável
 
