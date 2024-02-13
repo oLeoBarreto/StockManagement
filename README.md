@@ -12,15 +12,15 @@ Projeto spring boot para gerenciamento de estoque, que esta sendo desenvolvido c
 
 ## Variáveis de Ambiente
 
-Para rodar esse projeto, é necessário indicar um sercret para os tokens JWT na variável:
+Para rodar esse projeto, é necessário indicar um secret para os tokens JWT na variável:
 
 `JWT_SECRET`
 
-Também é possivel setar a porta que a aplicação irá rodar através da variável
+Também é possível informar a porta que a aplicação irá rodar através da variável:
 
 `PORT`
 
-Para definir o caminho que irá armazenar as imagens basta setar a variável
+Para definir o caminho que irá armazenar as imagens basta informar a variável:
 
 `UPLOAD_DIR`
 

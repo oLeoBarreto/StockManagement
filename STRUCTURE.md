@@ -21,5 +21,5 @@
 - `src/main/java/infra`: Contém arquivos referente a infraestrutura da aplicação, como configurações, DTOs, Handlers e Exceptions.
 - `src/main/java/infra/database/repository`: Todos os repositories dos domains se encontraram nessa pasta.
 - `src/main/java/domains`: Trata-se da camada mais baixa da aplicação onde objetos/classes de domain se encontram.
-- `src/main/java/useCases`: Camada intermediaria da aplicação, onde para cada domain se encontraram divididos por pastas, a interface com os useCases e um service que implemeta os useCases.
-- `src/main/java/controller`: Camada que os usuários irá interagir, os controllers iram implemetar os services de cada domain criado rotas para interação do usuários com a funçõess da aplicação. Também se encontra dividida em sub-pastas com cada domain, tendo a interface de endpoints que estaram disponíveis no controller e classe de controller que implemeta os endpoints.
+- `src/main/java/useCases`: Camada intermediaria da aplicação, onde para cada domain se encontraram divididos por pastas, a interface com os useCases e um service que implementa os useCases.
+- `src/main/java/controller`: Camada que os usuários irá interagir, os controllers iram implementar os services de cada domain criado rotas para interação do usuários com a funçõess da aplicação. Também se encontra dividida em sub-pastas com cada domain, tendo a interface de endpoints que estaram disponíveis no controller e classe de controller que implementa os endpoints.
