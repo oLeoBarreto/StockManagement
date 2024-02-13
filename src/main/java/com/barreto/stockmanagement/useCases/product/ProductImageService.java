@@ -4,6 +4,7 @@ import com.barreto.stockmanagement.domains.Product;
 import com.barreto.stockmanagement.infra.config.utils.FileStorage;
 import com.barreto.stockmanagement.infra.database.repository.ProductRepository;
 import com.barreto.stockmanagement.infra.exceptions.BadRequestException;
+import com.barreto.stockmanagement.infra.exceptions.ImageNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,10 @@ public class ProductImageService implements ProductImageUseCase {
     public byte[] findProductImage(String productId) {
         Product product = productService.findProductById(productId);
 
+        if (product.getImage() == null) {
+            throw new ImageNotFoundException("This product not contain a image!");
+        }
+
         Path imagePath = Path.of(fileStorage.getUploadDir(), product.getImage());
 
         try {
@@ -72,6 +77,10 @@ public class ProductImageService implements ProductImageUseCase {
 
     public void deleteProductImage(String productId) {
         Product product = productService.findProductById(productId);
+
+        if (product.getImage() == null) {
+            throw new ImageNotFoundException("This product not contain a image!");
+        }
 
         Path imagePath = Path.of(fileStorage.getUploadDir(), product.getImage());
 

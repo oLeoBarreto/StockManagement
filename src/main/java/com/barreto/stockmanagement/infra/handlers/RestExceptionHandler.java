@@ -1,9 +1,6 @@
 package com.barreto.stockmanagement.infra.handlers;
 
-import com.barreto.stockmanagement.infra.exceptions.BadRequestException;
-import com.barreto.stockmanagement.infra.exceptions.BadRequestExceptionDetail;
-import com.barreto.stockmanagement.infra.exceptions.DefaultExceptionDetails;
-import com.barreto.stockmanagement.infra.exceptions.ValidationExceptionDetail;
+import com.barreto.stockmanagement.infra.exceptions.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -31,6 +28,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .details(exception.getClass().getName())
                 .timestamp(LocalDateTime.now())
                 .build(), HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(ImageNotFoundException.class)
+    public ResponseEntity<ImageNotFoundExceptionDetails> handleBadRequestException(ImageNotFoundException exception) {
+        return new ResponseEntity<>(ImageNotFoundExceptionDetails.builder()
+                .title("Image was not found")
+                .message(exception.getMessage())
+                .status(HttpStatus.NOT_FOUND.value())
+                .details(exception.getClass().getName())
+                .timestamp(LocalDateTime.now())
+                .build(), HttpStatus.NOT_FOUND
         );
     }
 
