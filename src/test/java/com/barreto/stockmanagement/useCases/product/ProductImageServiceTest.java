@@ -4,6 +4,7 @@ import com.barreto.stockmanagement.domains.Product;
 import com.barreto.stockmanagement.infra.config.utils.FileStorage;
 import com.barreto.stockmanagement.infra.database.repository.ProductRepository;
 import com.barreto.stockmanagement.infra.exceptions.BadRequestException;
+import com.barreto.stockmanagement.infra.exceptions.ImageNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -95,6 +96,22 @@ class ProductImageServiceTest {
         productImageService.saveProductImage("productId", imageFile);
 
         assertDoesNotThrow(() -> {
+            productImageService.deleteProductImage("productId");
+        });
+    }
+
+    @Test
+    @DisplayName("Should not be able to download image from null property")
+    void TestDownloadNullImage() {
+        assertThrows(ImageNotFoundException.class, () -> {
+            productImageService.findProductImage("productId");
+        });
+    }
+
+    @Test
+    @DisplayName("Should not be able to delete a non existing product image")
+    void TestDeleteANonExistingProductImage() {
+        assertThrows(ImageNotFoundException.class, () -> {
             productImageService.deleteProductImage("productId");
         });
     }
