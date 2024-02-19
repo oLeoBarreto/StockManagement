@@ -1,6 +1,6 @@
 package com.barreto.stockmanagement.controller.outbounds;
 
-import com.barreto.stockmanagement.domains.Outbound;
+import com.barreto.stockmanagement.domains.documents.Outbound;
 import com.barreto.stockmanagement.domains.Product;
 import com.barreto.stockmanagement.infra.DTOs.outbound.OutboundPostRequestBody;
 import com.barreto.stockmanagement.useCases.outbound.OutboundService;

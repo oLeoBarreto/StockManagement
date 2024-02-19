@@ -1,6 +1,6 @@
 package com.barreto.stockmanagement.useCases.inbound;
 
-import com.barreto.stockmanagement.domains.Inbound;
+import com.barreto.stockmanagement.domains.documents.Inbound;
 import com.barreto.stockmanagement.domains.Product;
 import com.barreto.stockmanagement.infra.DTOs.inbound.InboundPostRequestBody;
 import com.barreto.stockmanagement.infra.database.repository.InboundRepository;
