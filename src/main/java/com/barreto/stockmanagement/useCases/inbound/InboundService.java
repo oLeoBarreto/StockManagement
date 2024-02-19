@@ -1,7 +1,9 @@
 package com.barreto.stockmanagement.useCases.inbound;
 
-import com.barreto.stockmanagement.domains.Inbound;
+import com.barreto.stockmanagement.domains.documents.DocumentStatus;
+import com.barreto.stockmanagement.domains.documents.Inbound;
 import com.barreto.stockmanagement.domains.Product;
+import com.barreto.stockmanagement.infra.DTOs.inbound.InboundStatusPutRequestBody;
 import com.barreto.stockmanagement.infra.exceptions.BadRequestException;
 import com.barreto.stockmanagement.infra.DTOs.inbound.InboundPostRequestBody;
 import com.barreto.stockmanagement.infra.database.repository.InboundRepository;
@@ -28,7 +30,23 @@ public class InboundService implements InboundUseCase {
     public Inbound createInbound(InboundPostRequestBody inboundPostRequestBody) {
         Product product = productService.findProductById(inboundPostRequestBody.productId());
         Inbound inbound = new Inbound(product, inboundPostRequestBody.quantity());
-        product.setStockQuantity(product.getStockQuantity() + inbound.getQuantity());
+
+        return repository.save(inbound);
+    }
+
+    public Inbound updateInboundStatus(InboundStatusPutRequestBody inboundStatusPutRequestBody) {
+        Inbound inbound = findInboundById(inboundStatusPutRequestBody.inboundId());
+
+        if (inbound.getStatus() == DocumentStatus.COMPLETED) {
+            throw new BadRequestException("This inbound is completed! Can't change the status.");
+        }
+
+        if (inbound.getStatus() == inboundStatusPutRequestBody.status()) {
+            throw new BadRequestException("This inbound already in this status!");
+        }
+
+        inbound.setStatus(inboundStatusPutRequestBody.status());
+        inbound.getProduct().setStockQuantity(inbound.getProduct().getStockQuantity() + inbound.getQuantity());
 
         return repository.save(inbound);
     }

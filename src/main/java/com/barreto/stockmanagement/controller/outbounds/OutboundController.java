@@ -1,7 +1,8 @@
 package com.barreto.stockmanagement.controller.outbounds;
 
-import com.barreto.stockmanagement.domains.Outbound;
+import com.barreto.stockmanagement.domains.documents.Outbound;
 import com.barreto.stockmanagement.infra.DTOs.outbound.OutboundPostRequestBody;
+import com.barreto.stockmanagement.infra.DTOs.outbound.OutboundStatusPutRequestBody;
 import com.barreto.stockmanagement.useCases.outbound.OutboundService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("outbounds")
+@RequestMapping("/outbounds")
 @RequiredArgsConstructor
 public class OutboundController implements OutboundEndpoints {
     private final OutboundService outboundService;
@@ -22,7 +23,7 @@ public class OutboundController implements OutboundEndpoints {
         return new ResponseEntity<>(outboundService.listAll(pageable), HttpStatus.OK);
     }
 
-    @GetMapping("findById")
+    @GetMapping("/findById")
     public ResponseEntity<Outbound> getOutboundById(@RequestParam String id) {
         return new ResponseEntity<>(outboundService.findOutboundById(id), HttpStatus.FOUND);
     }
@@ -30,6 +31,11 @@ public class OutboundController implements OutboundEndpoints {
     @PostMapping()
     public ResponseEntity<Outbound> postNewOutbound(@RequestBody @Valid OutboundPostRequestBody outboundPostRequestBody) {
         return new ResponseEntity<>(outboundService.createNewOutbound(outboundPostRequestBody), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/status")
+    public ResponseEntity<Outbound> putInboundStatus(OutboundStatusPutRequestBody outboundStatusPutRequestBody) {
+        return new ResponseEntity<>(outboundService.updateOutboundStatus(outboundStatusPutRequestBody), HttpStatus.OK);
     }
 
     @DeleteMapping()

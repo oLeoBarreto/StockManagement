@@ -1,5 +1,7 @@
-package com.barreto.stockmanagement.domains;
+package com.barreto.stockmanagement.domains.documents;
 
+import com.barreto.stockmanagement.domains.AbstractDomain;
+import com.barreto.stockmanagement.domains.Product;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -14,8 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class Inbound extends AbstractDomain{
+public class Outbound extends AbstractDomain {
     @NotNull(message = "Product could not be null")
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -24,4 +25,12 @@ public class Inbound extends AbstractDomain{
     @NotNull(message = "Quantity could not be null")
     @Positive(message = "Quantity price must be more than 0")
     private Float quantity;
+
+    private DocumentStatus status;
+
+    public Outbound(Product product, Float quantity) {
+        this.product = product;
+        this.quantity = quantity;
+        this.status = DocumentStatus.WAITING;
+    }
 }

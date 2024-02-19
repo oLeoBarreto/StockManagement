@@ -1,7 +1,9 @@
 package com.barreto.stockmanagement.useCases.outbound;
 
-import com.barreto.stockmanagement.domains.Outbound;
+import com.barreto.stockmanagement.domains.documents.DocumentStatus;
+import com.barreto.stockmanagement.domains.documents.Outbound;
 import com.barreto.stockmanagement.domains.Product;
+import com.barreto.stockmanagement.infra.DTOs.outbound.OutboundStatusPutRequestBody;
 import com.barreto.stockmanagement.infra.exceptions.BadRequestException;
 import com.barreto.stockmanagement.infra.DTOs.outbound.OutboundPostRequestBody;
 import com.barreto.stockmanagement.infra.database.repository.OutboundRepository;
@@ -29,7 +31,22 @@ public class OutboundService implements OutboundUseCase {
         Product product = productService.findProductById(outboundPostRequestBody.productId());
         Outbound outbound = new Outbound(product, outboundPostRequestBody.quantity());
 
-        product.setStockQuantity(product.getStockQuantity() - outboundPostRequestBody.quantity());
+        return repository.save(outbound);
+    }
+
+    public Outbound updateOutboundStatus(OutboundStatusPutRequestBody outboundStatusPutRequestBody) {
+        Outbound outbound = findOutboundById(outboundStatusPutRequestBody.outboundId());
+
+        if (outbound.getStatus() == DocumentStatus.COMPLETED) {
+            throw new BadRequestException("This outbound is completed! Can't change the status.");
+        }
+
+        if (outbound.getStatus() == outboundStatusPutRequestBody.status()) {
+            throw new BadRequestException("This outbound already in this status!");
+        }
+
+        outbound.setStatus(outboundStatusPutRequestBody.status());
+        outbound.getProduct().setStockQuantity(outbound.getProduct().getStockQuantity() - outbound.getQuantity());
 
         return repository.save(outbound);
     }
