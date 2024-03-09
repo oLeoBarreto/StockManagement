@@ -1,8 +1,10 @@
 package com.barreto.stockmanagement.controller.inbounds;
 
+import com.barreto.stockmanagement.domains.documents.DocumentStatus;
 import com.barreto.stockmanagement.domains.documents.Inbound;
 import com.barreto.stockmanagement.domains.Product;
 import com.barreto.stockmanagement.infra.DTOs.inbound.InboundPostRequestBody;
+import com.barreto.stockmanagement.infra.DTOs.inbound.InboundStatusPutRequestBody;
 import com.barreto.stockmanagement.useCases.inbound.InboundService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -57,6 +59,7 @@ class InboundControllerTest {
         when(inboundService.createInbound(any(InboundPostRequestBody.class))).thenReturn(inbound);
         when(inboundService.listAll(any(Pageable.class))).thenReturn(inboundPage);
         when(inboundService.findInboundById(anyString())).thenReturn(inbound);
+        when(inboundService.updateInboundStatus(any(InboundStatusPutRequestBody.class))).thenReturn(inbound);
         doNothing().when(inboundService).deleteInbound(anyString());
 
         MockitoAnnotations.openMocks(this);
@@ -95,6 +98,16 @@ class InboundControllerTest {
         assertNotNull(inbound.getBody());
         assertEquals("Produto 1", inbound.getBody().getProduct().getName());
         assertEquals(HttpStatus.CREATED, inbound.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("Should put the status of a inbound document")
+    void testPutInboundStatus() {
+        var inboundStatusPutRequestBody = new InboundStatusPutRequestBody("inboundId", DocumentStatus.COMPLETED);
+        var inbound = inboundController.putInboundStatus(inboundStatusPutRequestBody);
+
+        assertNotNull(inbound.getBody());
+        assertEquals(HttpStatus.OK, inbound.getStatusCode());
     }
 
     @Test

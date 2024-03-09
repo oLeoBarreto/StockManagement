@@ -1,8 +1,10 @@
 package com.barreto.stockmanagement.controller.outbounds;
 
+import com.barreto.stockmanagement.domains.documents.DocumentStatus;
 import com.barreto.stockmanagement.domains.documents.Outbound;
 import com.barreto.stockmanagement.domains.Product;
 import com.barreto.stockmanagement.infra.DTOs.outbound.OutboundPostRequestBody;
+import com.barreto.stockmanagement.infra.DTOs.outbound.OutboundStatusPutRequestBody;
 import com.barreto.stockmanagement.useCases.outbound.OutboundService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -57,6 +59,7 @@ class OutboundControllerTest {
         when(outboundService.createNewOutbound(any(OutboundPostRequestBody.class))).thenReturn(outbound);
         when(outboundService.listAll(any(Pageable.class))).thenReturn(outboundPage);
         when(outboundService.findOutboundById(anyString())).thenReturn(outbound);
+        when(outboundService.updateOutboundStatus(any(OutboundStatusPutRequestBody.class))).thenReturn(outbound);
         doNothing().when(outboundService).deleteOutbound(anyString());
 
         MockitoAnnotations.openMocks(this);
@@ -93,6 +96,16 @@ class OutboundControllerTest {
 
         assertNotNull(outbound.getBody());
         assertEquals(HttpStatus.CREATED, outbound.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("Should be able to put the outbound status")
+    void testPutOutboundStatus() {
+        var outboundStatusPutRequestBody = new OutboundStatusPutRequestBody("outboundId", DocumentStatus.COMPLETED);
+        var outbound = outboundController.putInboundStatus(outboundStatusPutRequestBody);
+
+        assertNotNull(outbound.getBody());
+        assertEquals(HttpStatus.OK, outbound.getStatusCode());
     }
 
     @Test
