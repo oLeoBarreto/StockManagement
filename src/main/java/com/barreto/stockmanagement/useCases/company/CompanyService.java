@@ -27,13 +27,9 @@ public class CompanyService implements CompanyUseCase {
     }
 
     public Company createNewCompany(CompanyPostRequestBody companyPostRequestBody) {
-        if (repository.findByCnpj(companyPostRequestBody.cnpj()).isPresent()) {
-            throw new BadRequestException("Already exists a company with this CNPJ!");
-        }
+        verifyIfCnpjIsRegistered(companyPostRequestBody.cnpj());
 
-        if (repository.findByEmail(companyPostRequestBody.email()).isPresent()) {
-            throw new BadRequestException("Already exists a company with this email!");
-        }
+        verifyIfEmailIsRegistered(companyPostRequestBody.email());
 
         var encodedPassword = new BCryptPasswordEncoder().encode(companyPostRequestBody.password());
 
@@ -63,5 +59,17 @@ public class CompanyService implements CompanyUseCase {
         var existingCompany = findCompanyByCNPJ(cnpj);
 
         repository.delete(existingCompany);
+    }
+
+    private void verifyIfEmailIsRegistered(String email) {
+        if (repository.findByEmail(email).isPresent()) {
+            throw new BadRequestException("Already exists a company with this email!");
+        }
+    }
+
+    private void verifyIfCnpjIsRegistered(String cnpj) {
+        if (repository.findByCnpj(cnpj).isPresent()) {
+            throw new BadRequestException("Already exists a company with this CNPJ!");
+        }
     }
 }
