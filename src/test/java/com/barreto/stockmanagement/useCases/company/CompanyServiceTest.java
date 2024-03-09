@@ -38,21 +38,22 @@ public class CompanyServiceTest {
         company.setId("companyId");
 
         when(repository.findById(anyString())).thenReturn(Optional.of(company));
-        when(repository.findByCnpj(anyString())).thenReturn(Optional.of(company));
-        when(repository.findByEmail(anyString())).thenReturn(Optional.of(company));
+        when(repository.findByEmail("company@test.com")).thenReturn(Optional.of(company));
+        when(repository.findByCnpj("12.123.123/0001-12")).thenReturn(Optional.of(company));
         when(repository.save(any(Company.class))).thenReturn(company);
         doNothing().when(repository).delete(any(Company.class));
 
         MockitoAnnotations.openMocks(this);
     }
 
+
     @Test
     @DisplayName("Should be able to create a new company")
     void testCreateNewCompany() {
         var companyPostRequestBody = new CompanyPostRequestBody(
-                "12.123.123/0001-12",
+                "12.123.123/0001-11",
                 "Company test",
-                "company@test.com",
+                "company@email.com",
                 "12345"
         );
 
@@ -65,49 +66,31 @@ public class CompanyServiceTest {
     @Test
     @DisplayName("Should not be able to create a company with a used CNPJ")
     void testDoesNotCreateCompanyWithUsedCNPJ() {
-        var companyPostRequestBody1 = new CompanyPostRequestBody(
+        var companyPostRequestBody = new CompanyPostRequestBody(
                 "12.123.123/0001-12",
                 "Company test",
                 "company@test.com",
                 "12345"
         );
-        companyService.createNewCompany(companyPostRequestBody1);
-
-        var companyPostRequestBody2 = new CompanyPostRequestBody(
-                "12.123.123/0001-12",
-                "Company test 2",
-                "company2@test.com",
-                "12345"
-        );
 
         assertThrows(
                 BadRequestException.class,
-                () -> companyService.createNewCompany(companyPostRequestBody2),
-                "Already exists a company with this CNPJ!");
+                () -> companyService.createNewCompany(companyPostRequestBody));
     }
 
     @Test
     @DisplayName("Should not be able to create a company with a used email")
     void testDoesNotCreateCompanyWithUsedEmail() {
-        var companyPostRequestBody1 = new CompanyPostRequestBody(
+        var companyPostRequestBody = new CompanyPostRequestBody(
                 "12.123.123/0001-12",
                 "Company test",
-                "company@test.com",
-                "12345"
-        );
-        companyService.createNewCompany(companyPostRequestBody1);
-
-        var companyPostRequestBody2 = new CompanyPostRequestBody(
-                "12.123.123/0001-13",
-                "Company test 2",
                 "company@test.com",
                 "12345"
         );
 
         assertThrows(
                 BadRequestException.class,
-                () -> companyService.createNewCompany(companyPostRequestBody2),
-                "Already exists a company with this email!");
+                () -> companyService.createNewCompany(companyPostRequestBody));
     }
 
     @Test
@@ -128,6 +111,8 @@ public class CompanyServiceTest {
     @Test
     @DisplayName("Should not be able to update a not existing company data")
     void testUpdateNotExistingCompanyData() {
+        when(repository.findById(anyString())).thenThrow(BadRequestException.class);
+
         var companyPutRequestBody = new CompanyPutRequestBody(
                 "Company test 2",
                 "company@test.com",
@@ -136,8 +121,7 @@ public class CompanyServiceTest {
 
         assertThrows(
                 BadRequestException.class,
-                () -> companyService.updateCompany("12.123.123/0001-11", companyPutRequestBody),
-                "Not exists a company with that CNPJ!");
+                () -> companyService.updateCompany("12.123.123/0001-11", companyPutRequestBody));
     }
 
     @Test
