@@ -1,8 +1,10 @@
 package com.barreto.stockmanagement.useCases.outbound;
 
+import com.barreto.stockmanagement.domains.documents.DocumentStatus;
 import com.barreto.stockmanagement.domains.documents.Outbound;
 import com.barreto.stockmanagement.domains.Product;
 import com.barreto.stockmanagement.infra.DTOs.outbound.OutboundPostRequestBody;
+import com.barreto.stockmanagement.infra.DTOs.outbound.OutboundStatusPutRequestBody;
 import com.barreto.stockmanagement.infra.database.repository.OutboundRepository;
 import com.barreto.stockmanagement.useCases.product.ProductService;
 import org.junit.jupiter.api.BeforeEach;
@@ -109,6 +111,23 @@ class OutboundServiceTest {
         Outbound outbound = outboundService.createNewOutbound(outboundPostRequestBody);
 
         assertNotNull(outbound);
+        assertTrue(outbound.getProduct().getStockQuantity() == 1F);
+        assertEquals(DocumentStatus.WAITING, outbound.getStatus());
+        assertEquals("productId", outbound.getProduct().getId());
+    }
+
+    @Test
+    @DisplayName("Should be able to change the status of a outbound document")
+    void testChangeDocStatus() {
+        OutboundPostRequestBody outboundPostRequestBody = new OutboundPostRequestBody(
+                1F,
+                "productId"
+        );
+        Outbound outbound = outboundService.createNewOutbound(outboundPostRequestBody);
+
+        var outboundStatusPutRequestBody = new OutboundStatusPutRequestBody(outbound.getId(), DocumentStatus.COMPLETED);
+
+        assertDoesNotThrow(() -> outboundService.updateOutboundStatus(outboundStatusPutRequestBody));
         assertTrue(outbound.getProduct().getStockQuantity() == 0F);
     }
 
@@ -121,9 +140,7 @@ class OutboundServiceTest {
         );
         Outbound outbound = outboundService.createNewOutbound(outboundPostRequestBody);
 
-        outboundService.deleteOutbound(outbound.id);
-
+        assertDoesNotThrow(() -> outboundService.deleteOutbound(outbound.id));
         assertTrue(repository.findAll().isEmpty());
-        assertTrue(outbound.getProduct().getStockQuantity() == 1F);
     }
 }

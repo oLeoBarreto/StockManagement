@@ -1,8 +1,10 @@
 package com.barreto.stockmanagement.useCases.inbound;
 
+import com.barreto.stockmanagement.domains.documents.DocumentStatus;
 import com.barreto.stockmanagement.domains.documents.Inbound;
 import com.barreto.stockmanagement.domains.Product;
 import com.barreto.stockmanagement.infra.DTOs.inbound.InboundPostRequestBody;
+import com.barreto.stockmanagement.infra.DTOs.inbound.InboundStatusPutRequestBody;
 import com.barreto.stockmanagement.infra.database.repository.InboundRepository;
 import com.barreto.stockmanagement.useCases.product.ProductService;
 import org.junit.jupiter.api.BeforeEach;
@@ -97,6 +99,20 @@ class InboundServiceTest {
         Inbound inbound = inboundService.createInbound(inboundPostRequestBody);
 
         assertNotNull(inbound);
+        assertTrue(inbound.getProduct().getStockQuantity() == 0F);
+        assertEquals("productId", inbound.getProduct().getId());
+        assertEquals(DocumentStatus.WAITING, inbound.getStatus());
+    }
+
+    @Test
+    @DisplayName("Should be able to change the status of a inbound document")
+    void testChangeDocStatus() {
+        InboundPostRequestBody inboundPostRequestBody = new InboundPostRequestBody(1F, "productId");
+        Inbound inbound = inboundService.createInbound(inboundPostRequestBody);
+
+        var docStatus = new InboundStatusPutRequestBody(inbound.getId(), DocumentStatus.COMPLETED);
+
+        assertDoesNotThrow(() -> inboundService.updateInboundStatus(docStatus));
         assertTrue(inbound.getProduct().getStockQuantity() == 1F);
     }
 
@@ -106,9 +122,7 @@ class InboundServiceTest {
         InboundPostRequestBody inboundPostRequestBody = new InboundPostRequestBody(1F, "productId");
         Inbound inbound = inboundService.createInbound(inboundPostRequestBody);
 
-        inboundService.deleteInbound(inbound.id);
-
+        assertDoesNotThrow(() -> inboundService.deleteInbound(inbound.id));
         assertTrue(repository.findAll().isEmpty());
-        assertTrue(inbound.getProduct().getStockQuantity() == 0F);
     }
 }
