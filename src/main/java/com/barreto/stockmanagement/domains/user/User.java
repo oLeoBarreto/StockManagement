@@ -1,9 +1,9 @@
 package com.barreto.stockmanagement.domains.user;
 
 import com.barreto.stockmanagement.domains.AbstractDomain;
+import com.barreto.stockmanagement.domains.Company;
 import com.barreto.stockmanagement.infra.exceptions.BadRequestException;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,8 +24,11 @@ public class User extends AbstractDomain implements UserDetails {
     private String password;
     private String name;
     private UserRole role;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "company_id")
+    private Company company;
 
-    public User(String login, String password, String name, UserRole role) {
+    public User(String login, String password, String name, UserRole role, Company company) {
         if (!IsValidEmail(login)) {
             throw new BadRequestException("This is a not valid email!");
         }
@@ -34,6 +37,7 @@ public class User extends AbstractDomain implements UserDetails {
         this.password = password;
         this.name = name;
         this.role = role;
+        this.company = company;
     }
 
     @Override
