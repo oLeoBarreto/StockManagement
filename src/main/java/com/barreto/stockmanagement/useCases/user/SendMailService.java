@@ -17,7 +17,7 @@ import static com.barreto.stockmanagement.infra.config.rabbitMQ.RabbitMQData.rou
 @Log4j2
 @Service
 @RequiredArgsConstructor
-public class SendMailService implements UserUseCase {
+public class SendMailService implements SendMailUseCase {
     private final RabbitTemplate rabbitTemplate;
 
     public void sendWelcomeMail(UserSendWelcomeMailBody user) {
