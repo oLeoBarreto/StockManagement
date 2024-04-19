@@ -10,5 +10,4 @@ public interface CompanyEndpoints {
     ResponseEntity<Company> getCompanyById(String id);
     ResponseEntity<Company> postNewCompany(CompanyPostRequestBody companyPostRequestBody);
     ResponseEntity<Company> putUpdateCompany(String cnpj, CompanyPutRequestBody companyPutRequestBody);
-    ResponseEntity<Void> deleteCompany(String cnpj);
 }

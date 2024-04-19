@@ -9,5 +9,4 @@ public interface CompanyUseCase {
     Company findCompanyByCNPJ(String cnpj);
     Company createNewCompany(CompanyPostRequestBody companyPostRequestBody);
     Company updateCompany(String cnpj, CompanyPutRequestBody companyPutRequestBody);
-    void deleteExistingCompany(String cnpj);
 }

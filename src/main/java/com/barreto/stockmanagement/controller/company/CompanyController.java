@@ -35,10 +35,4 @@ public class CompanyController implements CompanyEndpoints {
     public ResponseEntity<Company> putUpdateCompany(@RequestParam String cnpj, @RequestBody @Valid CompanyPutRequestBody companyPutRequestBody) {
         return new ResponseEntity<>(companyService.updateCompany(cnpj, companyPutRequestBody), HttpStatus.OK);
     }
-
-    @DeleteMapping()
-    public ResponseEntity<Void> deleteCompany(String cnpj) {
-        companyService.deleteExistingCompany(cnpj);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
 }

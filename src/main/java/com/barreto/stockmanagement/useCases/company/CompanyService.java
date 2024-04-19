@@ -3,16 +3,22 @@ package com.barreto.stockmanagement.useCases.company;
 import com.barreto.stockmanagement.domains.Company;
 import com.barreto.stockmanagement.infra.DTOs.company.CompanyPostRequestBody;
 import com.barreto.stockmanagement.infra.DTOs.company.CompanyPutRequestBody;
+import com.barreto.stockmanagement.infra.DTOs.user.UserRegisterRequestBody;
+import com.barreto.stockmanagement.infra.DTOs.user.UserUpdateLoginResponseBody;
 import com.barreto.stockmanagement.infra.database.repository.CompanyRepository;
 import com.barreto.stockmanagement.infra.exceptions.BadRequestException;
+import com.barreto.stockmanagement.useCases.user.UserUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import static com.barreto.stockmanagement.domains.user.UserRole.ADMIN;
 
 @Service
 @RequiredArgsConstructor
 public class CompanyService implements CompanyUseCase {
     private final CompanyRepository repository;
+    private final UserUseCase userService;
 
     public Company findCompanyByIdJ(String id) {
         return repository.findById(id).orElseThrow(
@@ -40,7 +46,15 @@ public class CompanyService implements CompanyUseCase {
                 encodedPassword
         );
 
-        return repository.save(company);
+        var savedCompany = repository.save(company);
+
+        userService.registerUser(
+                new UserRegisterRequestBody(
+                        company.getEmail(), company.getPassword(), company.getName(), ADMIN, company.getCnpj()
+                )
+        );
+
+        return savedCompany;
     }
 
     public Company updateCompany(String cnpj, CompanyPutRequestBody companyPutRequestBody) {
@@ -52,13 +66,15 @@ public class CompanyService implements CompanyUseCase {
         existingCompany.setEmail(companyPutRequestBody.email());
         existingCompany.setPassword(encodedPassword);
 
-        return repository.save(existingCompany);
-    }
+        var savedCompany = repository.save(existingCompany);
 
-    public void deleteExistingCompany(String cnpj) {
-        var existingCompany = findCompanyByCNPJ(cnpj);
+        userService.updateUserLogin(
+                new UserUpdateLoginResponseBody(
+                        savedCompany.getName(), savedCompany.getEmail(), savedCompany.getPassword(), ADMIN, savedCompany.getCnpj()
+                )
+        );
 
-        repository.delete(existingCompany);
+        return savedCompany;
     }
 
     private void verifyIfEmailIsRegistered(String email) {
