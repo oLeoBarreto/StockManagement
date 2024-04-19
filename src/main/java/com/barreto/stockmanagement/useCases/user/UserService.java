@@ -1,15 +1,15 @@
 package com.barreto.stockmanagement.useCases.user;
 
+import com.barreto.stockmanagement.domains.Company;
 import com.barreto.stockmanagement.domains.user.User;
-import com.barreto.stockmanagement.infra.DTOs.user.UserLoginRequestBody;
-import com.barreto.stockmanagement.infra.DTOs.user.UserLoginResponseBody;
-import com.barreto.stockmanagement.infra.DTOs.user.UserRegisterRequestBody;
-import com.barreto.stockmanagement.infra.DTOs.user.UserSendWelcomeMailBody;
+import com.barreto.stockmanagement.infra.DTOs.user.*;
 import com.barreto.stockmanagement.infra.config.token.TokenManageService;
+import com.barreto.stockmanagement.infra.database.repository.CompanyRepository;
 import com.barreto.stockmanagement.infra.database.repository.UserRepository;
 import com.barreto.stockmanagement.infra.exceptions.BadRequestException;
-import com.barreto.stockmanagement.useCases.company.CompanyUseCase;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,7 +24,7 @@ public class UserService implements UserUseCase {
     private final TokenManageService tokenManageService;
     private final AuthenticationManager authenticationManager;
     private final SendMailUseCase sendMailUseCase;
-    private final CompanyUseCase companyService;
+    private final CompanyRepository companyRepository;
 
     public UserLoginResponseBody loginUser(UserLoginRequestBody user) {
         UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(user.login(), user.password());
@@ -38,7 +38,7 @@ public class UserService implements UserUseCase {
             throw new BadRequestException("User already exists with this email!");
         }
 
-        var company = companyService.findCompanyByCNPJ(user.companyCNPJ());
+        var company = getCompany(user.companyCNPJ());
 
         String encodedPassword = new BCryptPasswordEncoder().encode(user.password());
         User createUser = new User(user.login(), encodedPassword, user.name(), user.role(), company);
@@ -46,5 +46,29 @@ public class UserService implements UserUseCase {
         sendMailUseCase.sendWelcomeMail(new UserSendWelcomeMailBody(user.login(), user.name()));
 
         return this.repository.save(createUser);
+    }
+
+    public User updateUserLogin(UserUpdateLoginResponseBody user) {
+        var company = getCompany(user.companyCNPJ());
+        var findUser = this.repository.findByLoginAndCompany(user.login(), company.getId());
+
+        if (findUser.getUsername().isEmpty()) {
+            throw new BadRequestException("User not found!");
+        }
+
+        findUser.setLogin(user.login());
+        findUser.setPassword(user.password());
+        findUser.setName(user.name());
+        findUser.setRole(user.role());
+
+        return this.repository.save(findUser);
+    }
+
+    public Page<User> listAllUserByCompany(String companyID, Pageable pageable) {
+        return this.repository.findByCompany(companyID, pageable);
+    }
+
+    private Company getCompany(String cnpj) {
+        return companyRepository.findByCnpj(cnpj).orElseThrow(() -> new BadRequestException("Not exists a company with that CNPJ!"));
     }
 }
