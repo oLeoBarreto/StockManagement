@@ -10,11 +10,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public interface UserRepository extends JpaRepository<User, String> {
     UserDetails findByLogin(String login);
-    @Modifying
     @Query(
-            value = "SELECT * FROM Users u WHERE u.login = ?1  AND u.company_id = ?2",
+            value = "SELECT * FROM Users u WHERE u.login = ?1 AND u.company_id = ?2",
             nativeQuery = true
     )
     User findByLoginAndCompany(String login, String companyID);
-    Page<User> findByCompany(String companyID, Pageable pageable);
+    Page<User> findByCompanyId(String companyID, Pageable pageable);
 }

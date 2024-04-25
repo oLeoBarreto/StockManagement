@@ -39,9 +39,7 @@ public class UserService implements UserUseCase {
         }
 
         var company = getCompany(user.companyCNPJ());
-
-        String encodedPassword = new BCryptPasswordEncoder().encode(user.password());
-        User createUser = new User(user.login(), encodedPassword, user.name(), user.role(), company);
+        User createUser = new User(user.login(), getEncodePassword(user.password()), user.name(), user.role(), company);
 
         sendMailUseCase.sendWelcomeMail(new UserSendWelcomeMailBody(user.login(), user.name()));
 
@@ -49,15 +47,10 @@ public class UserService implements UserUseCase {
     }
 
     public User updateUserLogin(UserUpdateLoginResponseBody user) {
-        var company = getCompany(user.companyCNPJ());
-        var findUser = this.repository.findByLoginAndCompany(user.login(), company.getId());
-
-        if (findUser.getUsername().isEmpty()) {
-            throw new BadRequestException("User not found!");
-        }
+        var findUser = this.repository.findById(user.id()).orElseThrow(() -> new BadRequestException("User not found whit this Id!"));
 
         findUser.setLogin(user.login());
-        findUser.setPassword(user.password());
+        findUser.setPassword(getEncodePassword(user.password()));
         findUser.setName(user.name());
         findUser.setRole(user.role());
 
@@ -65,10 +58,14 @@ public class UserService implements UserUseCase {
     }
 
     public Page<User> listAllUserByCompany(String companyID, Pageable pageable) {
-        return this.repository.findByCompany(companyID, pageable);
+        return this.repository.findByCompanyId(companyID, pageable);
     }
 
     private Company getCompany(String cnpj) {
         return companyRepository.findByCnpj(cnpj).orElseThrow(() -> new BadRequestException("Not exists a company with that CNPJ!"));
+    }
+
+    private static String getEncodePassword(String password) {
+        return new BCryptPasswordEncoder().encode(password);
     }
 }
