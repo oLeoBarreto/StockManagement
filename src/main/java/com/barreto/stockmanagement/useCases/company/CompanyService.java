@@ -4,7 +4,6 @@ import com.barreto.stockmanagement.domains.Company;
 import com.barreto.stockmanagement.infra.DTOs.company.CompanyPostRequestBody;
 import com.barreto.stockmanagement.infra.DTOs.company.CompanyPutRequestBody;
 import com.barreto.stockmanagement.infra.DTOs.user.UserRegisterRequestBody;
-import com.barreto.stockmanagement.infra.DTOs.user.UserUpdateLoginResponseBody;
 import com.barreto.stockmanagement.infra.database.repository.CompanyRepository;
 import com.barreto.stockmanagement.infra.exceptions.BadRequestException;
 import com.barreto.stockmanagement.useCases.user.UserUseCase;
@@ -20,7 +19,7 @@ public class CompanyService implements CompanyUseCase {
     private final CompanyRepository repository;
     private final UserUseCase userService;
 
-    public Company findCompanyByIdJ(String id) {
+    public Company findCompanyById(String id) {
         return repository.findById(id).orElseThrow(
                 () -> new BadRequestException("Not found a company with this Id!")
         );
@@ -50,7 +49,7 @@ public class CompanyService implements CompanyUseCase {
 
         userService.registerUser(
                 new UserRegisterRequestBody(
-                        company.getEmail(), company.getPassword(), company.getName(), ADMIN, company.getCnpj()
+                        company.getEmail(), companyPostRequestBody.password(), company.getName() + "-ADMIN", ADMIN, company.getCnpj()
                 )
         );
 
@@ -60,21 +59,10 @@ public class CompanyService implements CompanyUseCase {
     public Company updateCompany(String cnpj, CompanyPutRequestBody companyPutRequestBody) {
         var existingCompany = findCompanyByCNPJ(cnpj);
 
-        var encodedPassword = new BCryptPasswordEncoder().encode(companyPutRequestBody.password());
-
         existingCompany.setName(companyPutRequestBody.name());
         existingCompany.setEmail(companyPutRequestBody.email());
-        existingCompany.setPassword(encodedPassword);
 
-        var savedCompany = repository.save(existingCompany);
-
-        userService.updateUserLogin(
-                new UserUpdateLoginResponseBody(
-                        savedCompany.getName(), savedCompany.getEmail(), savedCompany.getPassword(), ADMIN, savedCompany.getCnpj()
-                )
-        );
-
-        return savedCompany;
+        return repository.save(existingCompany);
     }
 
     private void verifyIfEmailIsRegistered(String email) {

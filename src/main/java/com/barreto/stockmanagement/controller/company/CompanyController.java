@@ -23,7 +23,7 @@ public class CompanyController implements CompanyEndpoints {
 
     @GetMapping("/findById")
     public ResponseEntity<Company> getCompanyById(@RequestParam String id) {
-        return new ResponseEntity<>(companyService.findCompanyByIdJ(id), HttpStatus.FOUND);
+        return new ResponseEntity<>(companyService.findCompanyById(id), HttpStatus.FOUND);
     }
 
     @PostMapping()

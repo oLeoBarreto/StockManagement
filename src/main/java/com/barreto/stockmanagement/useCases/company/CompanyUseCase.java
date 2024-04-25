@@ -5,7 +5,7 @@ import com.barreto.stockmanagement.infra.DTOs.company.CompanyPostRequestBody;
 import com.barreto.stockmanagement.infra.DTOs.company.CompanyPutRequestBody;
 
 public interface CompanyUseCase {
-    Company findCompanyByIdJ(String id);
+    Company findCompanyById(String id);
     Company findCompanyByCNPJ(String cnpj);
     Company createNewCompany(CompanyPostRequestBody companyPostRequestBody);
     Company updateCompany(String cnpj, CompanyPutRequestBody companyPutRequestBody);
