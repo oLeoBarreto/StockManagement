@@ -5,6 +5,7 @@ import com.barreto.stockmanagement.infra.DTOs.company.CompanyPostRequestBody;
 import com.barreto.stockmanagement.infra.DTOs.company.CompanyPutRequestBody;
 import com.barreto.stockmanagement.infra.database.repository.CompanyRepository;
 import com.barreto.stockmanagement.infra.exceptions.BadRequestException;
+import com.barreto.stockmanagement.useCases.user.UserUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,9 @@ import static org.mockito.Mockito.*;
 public class CompanyServiceTest {
     @Mock
     private CompanyRepository repository;
+
+    @Mock
+    private UserUseCase userService;
 
     @InjectMocks
     private CompanyService companyService;
@@ -98,8 +102,7 @@ public class CompanyServiceTest {
     void testUpdateCompanyData() {
         var companyPutRequestBody = new CompanyPutRequestBody(
                 "Company test 2",
-                "company@test.com",
-                "12345"
+                "company@test.com"
         );
 
         var company = companyService.updateCompany("12.123.123/0001-12", companyPutRequestBody);
@@ -115,8 +118,7 @@ public class CompanyServiceTest {
 
         var companyPutRequestBody = new CompanyPutRequestBody(
                 "Company test 2",
-                "company@test.com",
-                "12345"
+                "company@test.com"
         );
 
         assertThrows(
@@ -125,8 +127,20 @@ public class CompanyServiceTest {
     }
 
     @Test
-    @DisplayName("Should be able to delete a company")
-    void testDeleteCompany() {
-        assertDoesNotThrow(() -> companyService.deleteExistingCompany("12.123.123/0001-12"));
+    @DisplayName("Should be able to find a company by your Id")
+    void testFindCompanyById() {
+        var company = companyService.findCompanyById("companyId");
+
+        assertNotNull(company);
+        assertEquals("companyId", company.getId());
+    }
+
+    @Test
+    @DisplayName("Should be able to find a company by your CNPJ")
+    void testFindCompanyByCNPJ() {
+        var company = companyService.findCompanyByCNPJ("12.123.123/0001-12");
+
+        assertNotNull(company);
+        assertEquals("12.123.123/0001-12", company.getCnpj());
     }
 }

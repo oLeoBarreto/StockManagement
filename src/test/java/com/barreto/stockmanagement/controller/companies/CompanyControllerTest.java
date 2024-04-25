@@ -38,9 +38,8 @@ public class CompanyControllerTest {
 
         when(companyService.createNewCompany(any(CompanyPostRequestBody.class))).thenReturn(company);
         when(companyService.updateCompany(anyString(), any(CompanyPutRequestBody.class))).thenReturn(company);
-        when(companyService.findCompanyByIdJ(anyString())).thenReturn(company);
+        when(companyService.findCompanyById(anyString())).thenReturn(company);
         when(companyService.findCompanyByCNPJ(anyString())).thenReturn(company);
-       //doNothing().when(companyService).deleteExistingCompany(anyString());
 
         MockitoAnnotations.openMocks(this);
     }
@@ -81,21 +80,10 @@ public class CompanyControllerTest {
     @DisplayName("Should be able to put and update a company")
     void testPutUpdateCompany() {
         var companyPutRequestBody = new CompanyPutRequestBody("Company test",
-                "company@test.com",
-                "12345");
+                "company@test.com");
         var companyResponse = companyController.putUpdateCompany("12.123.123/0001-12", companyPutRequestBody);
 
         assertNotNull(companyResponse.getBody());
         assertEquals(HttpStatus.OK, companyResponse.getStatusCode());
     }
-
-    @Test
-    @DisplayName("Should be able to delete a company")
-    void testDeleteCompany() {
-//        var companyResponse = companyController.deleteCompany("12.123.123/0001-12");
-//
-//        assertDoesNotThrow(() -> companyController.deleteCompany("12.123.123/0001-12"));
-//        assertEquals(HttpStatus.NO_CONTENT, companyResponse.getStatusCode());
-    }
-
 }
