@@ -20,8 +20,8 @@ public class InboundController implements InboundEndpoints {
     private final InboundService inboundService;
 
     @GetMapping()
-    public ResponseEntity<Page<Inbound>> getInboundList(Pageable pageable) {
-        return new ResponseEntity<>(inboundService.listAll(pageable), HttpStatus.OK);
+    public ResponseEntity<Page<Inbound>> getInboundList(@RequestParam String companyId, Pageable pageable) {
+        return new ResponseEntity<>(inboundService.listAll(pageable, companyId), HttpStatus.OK);
     }
 
     @GetMapping("/findById")

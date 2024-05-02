@@ -53,7 +53,7 @@ public class ProductService implements ProductUseCase {
         return repository.save(findProduct);
     }
     public void deleteProduct(String id) {
-        repository.delete(findProductById(id));
+        repository.deleteById(id);
     }
 
 }

@@ -1,5 +1,5 @@
 package com.barreto.stockmanagement.infra.DTOs.inbound;
 
-public record InboundPostRequestBody(Float quantity, String productId) {
+public record InboundPostRequestBody(Float quantity, String productId, String companyId) {
 
 }

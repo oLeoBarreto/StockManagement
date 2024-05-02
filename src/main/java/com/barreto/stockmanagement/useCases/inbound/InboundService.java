@@ -7,6 +7,7 @@ import com.barreto.stockmanagement.infra.DTOs.inbound.InboundStatusPutRequestBod
 import com.barreto.stockmanagement.infra.exceptions.BadRequestException;
 import com.barreto.stockmanagement.infra.DTOs.inbound.InboundPostRequestBody;
 import com.barreto.stockmanagement.infra.database.repository.InboundRepository;
+import com.barreto.stockmanagement.useCases.company.CompanyUseCase;
 import com.barreto.stockmanagement.useCases.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,9 +19,10 @@ import org.springframework.stereotype.Service;
 public class InboundService implements InboundUseCase {
     private final InboundRepository repository;
     private final ProductService productService;
+    private final CompanyUseCase companyService;
 
-    public Page<Inbound> listAll(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<Inbound> listAll(Pageable pageable, String companyId) {
+        return repository.findAllByCompanyId(companyId, pageable);
     }
 
     public Inbound findInboundById(String id) {
@@ -29,7 +31,8 @@ public class InboundService implements InboundUseCase {
 
     public Inbound createInbound(InboundPostRequestBody inboundPostRequestBody) {
         Product product = productService.findProductById(inboundPostRequestBody.productId());
-        Inbound inbound = new Inbound(product, inboundPostRequestBody.quantity());
+        var company = companyService.findCompanyById(inboundPostRequestBody.companyId());
+        Inbound inbound = new Inbound(product, inboundPostRequestBody.quantity(), company);
 
         return repository.save(inbound);
     }
