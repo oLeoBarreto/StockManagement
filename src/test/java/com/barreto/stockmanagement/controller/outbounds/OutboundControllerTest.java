@@ -1,5 +1,6 @@
 package com.barreto.stockmanagement.controller.outbounds;
 
+import com.barreto.stockmanagement.domains.Company;
 import com.barreto.stockmanagement.domains.documents.DocumentStatus;
 import com.barreto.stockmanagement.domains.documents.Outbound;
 import com.barreto.stockmanagement.domains.Product;
@@ -38,6 +39,14 @@ class OutboundControllerTest {
 
     @BeforeEach
     void setUp() {
+        var company = new Company(
+                "12.123.123/0001-12",
+                "Company test",
+                "company@test.com",
+                "12345"
+        );
+        company.setId("companyId");
+
         Product product = new Product(
                 "Produto 1",
                 "Descricao do produto de teste",
@@ -45,7 +54,8 @@ class OutboundControllerTest {
                 "test supplier",
                 "test",
                 null,
-                0F
+                0F,
+                company
         );
         product.id = "productId";
 

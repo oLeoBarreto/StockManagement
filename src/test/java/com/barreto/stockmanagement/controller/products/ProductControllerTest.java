@@ -1,5 +1,6 @@
 package com.barreto.stockmanagement.controller.products;
 
+import com.barreto.stockmanagement.domains.Company;
 import com.barreto.stockmanagement.domains.Product;
 import com.barreto.stockmanagement.infra.DTOs.product.ProductPostRequestBody;
 import com.barreto.stockmanagement.infra.DTOs.product.ProductPutRequestBody;
@@ -42,6 +43,14 @@ class ProductControllerTest {
 
     @BeforeEach
     void setUp() {
+        var company = new Company(
+                "12.123.123/0001-12",
+                "Company test",
+                "company@test.com",
+                "12345"
+        );
+        company.setId("companyId");
+
         Product product = new Product(
                 "Produto 1",
                 "Descricao do produto de teste",
@@ -49,7 +58,8 @@ class ProductControllerTest {
                 "test supplier",
                 "test",
                 "image-productId.jpeg",
-                1F
+                1F,
+                company
         );
         product.id = "productId";
 
@@ -58,9 +68,9 @@ class ProductControllerTest {
         when(productService.createNewProduct(any(ProductPostRequestBody.class))).thenReturn(product);
         when(productService.updateProduct(any(ProductPutRequestBody.class))).thenReturn(product);
         when(productService.findProductById(anyString())).thenReturn(product);
-        when(productService.findProductBySupplier(any(Pageable.class), anyString())).thenReturn(productPage);
-        when(productService.findProductByCategory(any(Pageable.class), anyString())).thenReturn(productPage);
-        when(productService.listAllProducts(any(Pageable.class))).thenReturn(productPage);
+        when(productService.findProductBySupplier(any(Pageable.class), anyString(), anyString())).thenReturn(productPage);
+        when(productService.findProductByCategory(any(Pageable.class), anyString(), anyString())).thenReturn(productPage);
+        when(productService.listAllProducts(anyString(), any(Pageable.class))).thenReturn(productPage);
         doNothing().when(productService).deleteProduct(anyString());
 
         when(productImageService.saveProductImage(anyString(), any(MultipartFile.class))).thenReturn(product);
@@ -73,7 +83,7 @@ class ProductControllerTest {
     @Test
     @DisplayName("Should get a page of all existing products")
     void testGetProductsLists() {
-        ResponseEntity<Page<Product>> productPage = productController.getProductsLists(PageRequest.of(0, 10));
+        ResponseEntity<Page<Product>> productPage = productController.getProductsLists(PageRequest.of(0, 10), "companyId");
 
         assertNotNull(productPage);
         assertEquals("Produto 1", productPage.getBody().toList().get(0).getName());
@@ -83,7 +93,7 @@ class ProductControllerTest {
     @Test
     @DisplayName("Should get a page of all existing products by category")
     void testGetProductByCategory() {
-        ResponseEntity<Page<Product>> productPage = productController.getProductByCategory(PageRequest.of(0, 10), "test");
+        ResponseEntity<Page<Product>> productPage = productController.getProductByCategory(PageRequest.of(0, 10), "test", "companyId");
 
         assertNotNull(productPage);
         assertEquals("Produto 1", productPage.getBody().toList().get(0).getName());
@@ -93,7 +103,7 @@ class ProductControllerTest {
     @Test
     @DisplayName("Should get a page of all existing products by supplier")
     void testGetProductBySupplier() {
-        ResponseEntity<Page<Product>> productPage = productController.getProductByCategory(PageRequest.of(0, 10), "test");
+        ResponseEntity<Page<Product>> productPage = productController.getProductByCategory(PageRequest.of(0, 10), "test", "companyId");
 
         assertNotNull(productPage);
         assertEquals("Produto 1", productPage.getBody().toList().get(0).getName());
@@ -118,7 +128,8 @@ class ProductControllerTest {
                 "Descricao do produto de teste",
                 new BigDecimal(1),
                 "test supplier",
-                "test"
+                "test",
+                "companyId"
         );
 
         ResponseEntity<Product> product = productController.postNewProduct(productRequestBody);

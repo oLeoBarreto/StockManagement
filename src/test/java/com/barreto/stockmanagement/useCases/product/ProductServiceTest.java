@@ -1,9 +1,11 @@
 package com.barreto.stockmanagement.useCases.product;
 
+import com.barreto.stockmanagement.domains.Company;
 import com.barreto.stockmanagement.domains.Product;
 import com.barreto.stockmanagement.infra.DTOs.product.ProductPostRequestBody;
 import com.barreto.stockmanagement.infra.DTOs.product.ProductPutRequestBody;
 import com.barreto.stockmanagement.infra.database.repository.ProductRepository;
+import com.barreto.stockmanagement.useCases.company.CompanyUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,11 +33,22 @@ class ProductServiceTest {
     @Mock
     private ProductRepository repository;
 
+    @Mock
+    private CompanyUseCase companyService;
+
     @InjectMocks
     private ProductService productService;
 
     @BeforeEach
     void setUp() {
+        var company = new Company(
+                "12.123.123/0001-12",
+                "Company test",
+                "company@test.com",
+                "12345"
+        );
+        company.setId("companyId");
+
         Product product = new Product(
                 "Produto 1",
                 "Descricao do produto de teste",
@@ -43,23 +56,21 @@ class ProductServiceTest {
                 "test supplier",
                 "test",
                 null,
-                1F
+                1F,
+                company
         );
         product.id = "productId";
 
         PageImpl<Product> productPage = new PageImpl<>(List.of(product));
 
-        when(repository.findAll(any(Pageable.class))).thenReturn(productPage);
-
+        when(repository.findByCompanyId(any(Pageable.class), anyString())).thenReturn(productPage);
         when(repository.findById(anyString())).thenReturn(Optional.of(product));
-
-        when(repository.findByCategory(any(Pageable.class), anyString())).thenReturn(productPage);
-
-        when(repository.findBySupplier(any(Pageable.class), anyString())).thenReturn(productPage);
-
+        when(repository.findByCategoryAndCompanyId(any(Pageable.class), anyString(), anyString())).thenReturn(productPage);
+        when(repository.findBySupplierAndCompanyId(any(Pageable.class), anyString(), anyString())).thenReturn(productPage);
         when(repository.save(any(Product.class))).thenReturn(product);
-
         doNothing().when(repository).delete(any(Product.class));
+
+        when(companyService.findCompanyById(anyString())).thenReturn(company);
 
         MockitoAnnotations.openMocks(this);
     }
@@ -72,7 +83,8 @@ class ProductServiceTest {
                 "Descricao do produto de teste",
                 new BigDecimal(1),
                 "test supplier",
-                "test");
+                "test",
+                "companyId");
 
         Product product = productService.createNewProduct(productRequestBody);
 
@@ -88,7 +100,8 @@ class ProductServiceTest {
                 "Descricao do produto de teste",
                 new BigDecimal(1),
                 "test supplier",
-                "test");
+                "test",
+                "companyId");
 
         Product cratedProduct = productService.createNewProduct(productRequestBody);
         Product foundProduct = productService.findProductById(cratedProduct.id);
@@ -104,15 +117,12 @@ class ProductServiceTest {
                 "Descricao do produto de teste",
                 new BigDecimal(1),
                 "test supplier",
-                "test");
+                "test",
+                "companyId");
 
-        Product cratedProduct = productService.createNewProduct(productRequestBody);
+        productService.createNewProduct(productRequestBody);
 
-        Page<Product> fakeProductPage = new PageImpl<>(Arrays.asList(cratedProduct));
-
-        when(repository.findBySupplier(any(Pageable.class), eq("test supplier"))).thenReturn(fakeProductPage);
-
-        Page<Product> productPage = productService.findProductBySupplier(PageRequest.of(0, 10), "test supplier");
+        Page<Product> productPage = productService.findProductBySupplier(PageRequest.of(0, 10), "test supplier", "companyId");
 
         assertFalse(productPage.getContent().isEmpty());
     }
@@ -125,11 +135,12 @@ class ProductServiceTest {
                 "Descricao do produto de teste",
                 new BigDecimal(1),
                 "test supplier",
-                "test");
+                "test",
+                "companyId");
 
-        Product cratedProduct = productService.createNewProduct(productRequestBody);
+        Product createdProduct = productService.createNewProduct(productRequestBody);
 
-        Page<Product> productPage = productService.findProductByCategory(PageRequest.of(0, 10), cratedProduct.getCategory());
+        Page<Product> productPage = productService.findProductByCategory(PageRequest.of(0, 10), createdProduct.getCategory(), createdProduct.getCompany().getId());
 
         assertFalse(productPage.getContent().isEmpty());
     }
@@ -142,11 +153,13 @@ class ProductServiceTest {
                 "Descricao do produto de teste",
                 new BigDecimal(1),
                 "test supplier",
-                "test");
+                "test",
+                "companyId"
+        );
 
-        Product cratedProduct = productService.createNewProduct(productRequestBody);
+        productService.createNewProduct(productRequestBody);
 
-        Page<Product> productPage = productService.listAllProducts(PageRequest.of(0, 10));
+        Page<Product> productPage = productService.listAllProducts("companyId", PageRequest.of(0, 10));
 
         assertFalse(productPage.getContent().isEmpty());
     }
@@ -159,7 +172,8 @@ class ProductServiceTest {
                 "Descricao do produto de teste",
                 new BigDecimal(1),
                 "test supplier",
-                "test"
+                "test",
+                "companyId"
         );
 
         Product product = productService.createNewProduct(productRequestBody);
@@ -187,7 +201,8 @@ class ProductServiceTest {
                 "Descricao do produto de teste",
                 new BigDecimal(1),
                 "test supplier",
-                "test"
+                "test",
+                "companyId"
         );
 
         Product product = productService.createNewProduct(productRequestBody);

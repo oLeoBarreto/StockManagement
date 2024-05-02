@@ -1,5 +1,6 @@
 package com.barreto.stockmanagement.useCases.product;
 
+import com.barreto.stockmanagement.domains.Company;
 import com.barreto.stockmanagement.domains.Product;
 import com.barreto.stockmanagement.infra.config.utils.FileStorage;
 import com.barreto.stockmanagement.infra.database.repository.ProductRepository;
@@ -36,6 +37,14 @@ class ProductImageServiceTest {
 
     @BeforeEach
     void setUp() {
+        var company = new Company(
+                "12.123.123/0001-12",
+                "Company test",
+                "company@test.com",
+                "12345"
+        );
+        company.setId("companyId");
+
         Product product = new Product(
                 "Produto 1",
                 "Descricao do produto de teste",
@@ -43,7 +52,8 @@ class ProductImageServiceTest {
                 "test supplier",
                 "test",
                 null,
-                1F
+                1F,
+                company
         );
         product.id = "productId";
 

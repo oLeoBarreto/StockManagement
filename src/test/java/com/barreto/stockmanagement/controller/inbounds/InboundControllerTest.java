@@ -1,5 +1,6 @@
 package com.barreto.stockmanagement.controller.inbounds;
 
+import com.barreto.stockmanagement.domains.Company;
 import com.barreto.stockmanagement.domains.documents.DocumentStatus;
 import com.barreto.stockmanagement.domains.documents.Inbound;
 import com.barreto.stockmanagement.domains.Product;
@@ -37,6 +38,14 @@ class InboundControllerTest {
 
     @BeforeEach
     void setUp() {
+        var company = new Company(
+                "12.123.123/0001-12",
+                "Company test",
+                "company@test.com",
+                "12345"
+        );
+        company.setId("companyId");
+
         Product product = new Product(
                 "Produto 1",
                 "Descricao do produto de teste",
@@ -44,7 +53,8 @@ class InboundControllerTest {
                 "test supplier",
                 "test",
                 null,
-                0F
+                0F,
+                company
         );
         product.id = "productId";
 
