@@ -7,6 +7,7 @@ import com.barreto.stockmanagement.domains.Product;
 import com.barreto.stockmanagement.infra.DTOs.inbound.InboundPostRequestBody;
 import com.barreto.stockmanagement.infra.DTOs.inbound.InboundStatusPutRequestBody;
 import com.barreto.stockmanagement.infra.database.repository.InboundRepository;
+import com.barreto.stockmanagement.useCases.company.CompanyUseCase;
 import com.barreto.stockmanagement.useCases.product.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,6 +36,9 @@ class InboundServiceTest {
 
     @Mock
     private ProductService productService;
+
+    @Mock
+    private CompanyUseCase companyService;
 
     @InjectMocks
     private InboundService inboundService;
@@ -65,16 +69,18 @@ class InboundServiceTest {
 
         Inbound inbound = new Inbound(
                 product,
-                1F
+                1F,
+                company
         );
         inbound.id = "inboundId";
 
         PageImpl<Inbound> inboundPage = new PageImpl<>(List.of(inbound));
 
-        when(repository.findAll(any(Pageable.class))).thenReturn(inboundPage);
+        when(repository.findAllByCompanyId(anyString(), any(Pageable.class))).thenReturn(inboundPage);
         when(repository.findById(anyString())).thenReturn(Optional.of(inbound));
         when(repository.save(any(Inbound.class))).thenReturn(inbound);
         doNothing().when(repository).delete(any(Inbound.class));
+        when(companyService.findCompanyById(anyString())).thenReturn(company);
 
         MockitoAnnotations.openMocks(this);
     }
@@ -82,10 +88,10 @@ class InboundServiceTest {
     @Test
     @DisplayName("Should list all existing inbounds")
     void testListAllInbounds() {
-        InboundPostRequestBody inboundPostRequestBody = new InboundPostRequestBody(1F, "productId");
+        InboundPostRequestBody inboundPostRequestBody = new InboundPostRequestBody(1F, "productId", "companyId");
         inboundService.createInbound(inboundPostRequestBody);
 
-        Page<Inbound> inboundPage = inboundService.listAll(PageRequest.of(0, 10));
+        Page<Inbound> inboundPage = inboundService.listAll(PageRequest.of(0, 10), "companyId");
 
         assertFalse(inboundPage.getContent().isEmpty());
     }
@@ -93,7 +99,7 @@ class InboundServiceTest {
     @Test
     @DisplayName("Should find an existing inbound by ID")
     void testFindInboundById() {
-        InboundPostRequestBody inboundPostRequestBody = new InboundPostRequestBody(1F, "productId");
+        InboundPostRequestBody inboundPostRequestBody = new InboundPostRequestBody(1F, "productId", "companyId");
         Inbound createdInbound = inboundService.createInbound(inboundPostRequestBody);
 
         Inbound foundInbound = inboundService.findInboundById(createdInbound.id);
@@ -105,7 +111,7 @@ class InboundServiceTest {
     @Test
     @DisplayName("Should create a new Inbound")
     void testCreateNewInbound() {
-        InboundPostRequestBody inboundPostRequestBody = new InboundPostRequestBody(1F, "productId");
+        InboundPostRequestBody inboundPostRequestBody = new InboundPostRequestBody(1F, "productId", "companyId");
         Inbound inbound = inboundService.createInbound(inboundPostRequestBody);
 
         assertNotNull(inbound);
@@ -117,7 +123,7 @@ class InboundServiceTest {
     @Test
     @DisplayName("Should be able to change the status of a inbound document")
     void testChangeDocStatus() {
-        InboundPostRequestBody inboundPostRequestBody = new InboundPostRequestBody(1F, "productId");
+        InboundPostRequestBody inboundPostRequestBody = new InboundPostRequestBody(1F, "productId", "companyId");
         Inbound inbound = inboundService.createInbound(inboundPostRequestBody);
 
         var docStatus = new InboundStatusPutRequestBody(inbound.getId(), DocumentStatus.COMPLETED);
@@ -129,7 +135,7 @@ class InboundServiceTest {
     @Test
     @DisplayName("Should delete an existing Inbound")
     void testDeleteInbound() {
-        InboundPostRequestBody inboundPostRequestBody = new InboundPostRequestBody(1F, "productId");
+        InboundPostRequestBody inboundPostRequestBody = new InboundPostRequestBody(1F, "productId", "companyId");
         Inbound inbound = inboundService.createInbound(inboundPostRequestBody);
 
         assertDoesNotThrow(() -> inboundService.deleteInbound(inbound.id));

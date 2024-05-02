@@ -60,14 +60,15 @@ class InboundControllerTest {
 
         Inbound inbound = new Inbound(
                 product,
-                1F
+                1F,
+                company
         );
         inbound.id = "inboundId";
 
         PageImpl<Inbound> inboundPage = new PageImpl<>(List.of(inbound));
 
         when(inboundService.createInbound(any(InboundPostRequestBody.class))).thenReturn(inbound);
-        when(inboundService.listAll(any(Pageable.class))).thenReturn(inboundPage);
+        when(inboundService.listAll(any(Pageable.class), anyString())).thenReturn(inboundPage);
         when(inboundService.findInboundById(anyString())).thenReturn(inbound);
         when(inboundService.updateInboundStatus(any(InboundStatusPutRequestBody.class))).thenReturn(inbound);
         doNothing().when(inboundService).deleteInbound(anyString());
@@ -78,7 +79,7 @@ class InboundControllerTest {
     @Test
     @DisplayName("Should get a page of existing inbounds")
     void testGetInboundList() {
-        ResponseEntity<Page<Inbound>> inbound = inboundController.getInboundList(PageRequest.of(0, 10));
+        ResponseEntity<Page<Inbound>> inbound = inboundController.getInboundList("companyId", PageRequest.of(0, 10));
 
         assertNotNull(inbound.getBody());
 
@@ -100,7 +101,8 @@ class InboundControllerTest {
     void testPostNewInbound() {
         InboundPostRequestBody inboundPostRequestBody = new InboundPostRequestBody(
                 1F,
-                "productId"
+                "productId",
+                "companyId"
         );
 
         ResponseEntity<Inbound> inbound = inboundController.postNewInbound(inboundPostRequestBody);
