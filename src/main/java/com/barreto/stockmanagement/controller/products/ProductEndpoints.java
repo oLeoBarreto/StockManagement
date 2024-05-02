@@ -9,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ProductEndpoints {
-     ResponseEntity<Page<Product>> getProductsLists(Pageable pageable);
-     ResponseEntity<Page<Product>> getProductByCategory(Pageable pageable, String category);
-     ResponseEntity<Page<Product>> getProductBySupplier(Pageable pageable, String supplier);
+     ResponseEntity<Page<Product>> getProductsLists(Pageable pageable, String companyId);
+     ResponseEntity<Page<Product>> getProductByCategory(Pageable pageable, String category, String companyId);
+     ResponseEntity<Page<Product>> getProductBySupplier(Pageable pageable, String supplier, String companyId);
      ResponseEntity<Product> getProductById(String id);
      ResponseEntity<byte[]> getProductImage(String productId);
      ResponseEntity<Product> postNewProduct(ProductPostRequestBody product);

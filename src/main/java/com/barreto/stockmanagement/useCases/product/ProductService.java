@@ -6,6 +6,7 @@ import com.barreto.stockmanagement.infra.DTOs.product.ProductPostRequestBody;
 import com.barreto.stockmanagement.infra.DTOs.product.ProductPutRequestBody;
 import com.barreto.stockmanagement.infra.database.repository.ProductRepository;
 import com.barreto.stockmanagement.infra.exceptions.BadRequestException;
+import com.barreto.stockmanagement.useCases.company.CompanyUseCase;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,17 +18,18 @@ import org.springframework.stereotype.Service;
 public class ProductService implements ProductUseCase {
 
     private final ProductRepository repository;
+    private final CompanyUseCase companyService;
 
-    public Page<Product> listAllProducts(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<Product> listAllProducts(String companyId, Pageable pageable) {
+        return repository.findByCompanyId(pageable, companyId);
     }
 
-    public Page<Product> findProductByCategory(Pageable pageable, String category) {
-        return repository.findByCategory(pageable, category);
+    public Page<Product> findProductByCategory(Pageable pageable, String category, String companyId) {
+        return repository.findByCategoryAndCompanyId(pageable, category, companyId);
     }
 
-    public Page<Product> findProductBySupplier(Pageable pageable, String supplier) {
-        return repository.findBySupplier(pageable, supplier);
+    public Page<Product> findProductBySupplier(Pageable pageable, String supplier, String companyId) {
+        return repository.findBySupplierAndCompanyId(pageable, supplier, companyId);
     }
 
     public Product findProductById(String id) {
@@ -36,7 +38,8 @@ public class ProductService implements ProductUseCase {
 
     @Transactional
     public Product createNewProduct(ProductPostRequestBody product) {
-        return repository.save(ProductMapper.INSTANCE.toProduct(product));
+        var company = companyService.findCompanyById(product.companyId());
+        return repository.save(ProductMapper.INSTANCE.toProduct(product, company));
     }
 
     public Product updateProduct(ProductPutRequestBody product) {

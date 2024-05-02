@@ -7,9 +7,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ProductUseCase {
-     Page<Product> listAllProducts(Pageable pageable);
-     Page<Product> findProductByCategory(Pageable pageable, String category);
-     Page<Product> findProductBySupplier(Pageable pageable, String supplier);
+     Page<Product> listAllProducts(String companyId, Pageable pageable);
+     Page<Product> findProductByCategory(Pageable pageable, String category, String companyId);
+     Page<Product> findProductBySupplier(Pageable pageable, String supplier, String companyId);
      Product findProductById(String id);
      Product createNewProduct(ProductPostRequestBody product);
      Product updateProduct(ProductPutRequestBody product);

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, String> {
-    Page<Product> findByCategory(Pageable pageable, String category);
-    Page<Product> findBySupplier(Pageable pageable, String supplier);
+    Page<Product> findByCategoryAndCompanyId(Pageable pageable, String category, String companyId);
+    Page<Product> findBySupplierAndCompanyId(Pageable pageable, String supplier, String companyId);
+    Page<Product> findByCompanyId(Pageable pageable, String companyId);
 }

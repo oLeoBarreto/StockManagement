@@ -1,6 +1,9 @@
 package com.barreto.stockmanagement.domains;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -43,4 +46,9 @@ public class Product extends AbstractDomain{
     private String image;
 
     private Float stockQuantity = 0F;
+
+    @NotNull(message = "Company id could not be null")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "company_id")
+    private Company company;
 }

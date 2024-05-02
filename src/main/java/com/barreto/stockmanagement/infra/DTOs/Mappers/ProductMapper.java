@@ -1,5 +1,6 @@
 package com.barreto.stockmanagement.infra.DTOs.Mappers;
 
+import com.barreto.stockmanagement.domains.Company;
 import com.barreto.stockmanagement.infra.DTOs.product.ProductPostRequestBody;
 import com.barreto.stockmanagement.domains.Product;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,19 @@ public class ProductMapper {
         product.setUnitPrice(productPostRequestBody.unitPrice());
         product.setSupplier(productPostRequestBody.supplier());
         product.setCategory(productPostRequestBody.category());
+
+        return product;
+    }
+
+    public Product toProduct(ProductPostRequestBody productPostRequestBody, Company company) {
+        Product product = new Product();
+
+        product.setName(productPostRequestBody.name());
+        product.setDescription(productPostRequestBody.description());
+        product.setUnitPrice(productPostRequestBody.unitPrice());
+        product.setSupplier(productPostRequestBody.supplier());
+        product.setCategory(productPostRequestBody.category());
+        product.setCompany(company);
 
         return product;
     }

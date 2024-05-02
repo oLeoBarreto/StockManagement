@@ -23,18 +23,18 @@ public class ProductController implements ProductEndpoints {
     private final ProductImageUseCase productImageService;
 
     @GetMapping()
-    public ResponseEntity<Page<Product>> getProductsLists(Pageable pageable) {
-        return new ResponseEntity<>(productService.listAllProducts(pageable), HttpStatus.OK);
+    public ResponseEntity<Page<Product>> getProductsLists(Pageable pageable, @RequestParam String companyId) {
+        return new ResponseEntity<>(productService.listAllProducts(companyId, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/findByCategory")
-    public ResponseEntity<Page<Product>> getProductByCategory(Pageable pageable, @RequestParam String category) {
-        return new ResponseEntity<>(productService.findProductByCategory(pageable, category), HttpStatus.FOUND);
+    public ResponseEntity<Page<Product>> getProductByCategory(Pageable pageable, @RequestParam String category, @RequestParam String companyId) {
+        return new ResponseEntity<>(productService.findProductByCategory(pageable, category, companyId), HttpStatus.FOUND);
     }
 
     @GetMapping("/findBySupplier")
-    public ResponseEntity<Page<Product>> getProductBySupplier(Pageable pageable, @RequestParam String supplier) {
-        return new ResponseEntity<>(productService.findProductBySupplier(pageable, supplier), HttpStatus.FOUND);
+    public ResponseEntity<Page<Product>> getProductBySupplier(Pageable pageable, @RequestParam String supplier, @RequestParam String companyId) {
+        return new ResponseEntity<>(productService.findProductBySupplier(pageable, supplier, companyId), HttpStatus.FOUND);
     }
 
     @GetMapping("/findById")
