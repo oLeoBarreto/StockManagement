@@ -24,7 +24,7 @@ public class User extends AbstractDomain implements UserDetails {
     private String password;
     private String name;
     private UserRole role;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "company_id")
     private Company company;
 
