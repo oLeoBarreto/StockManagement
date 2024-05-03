@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface OutboundUseCase {
-    Page<Outbound> listAll(Pageable pageable);
+    Page<Outbound> listAll(String companyId, Pageable pageable);
     Outbound findOutboundById(String id);
     Outbound createNewOutbound(OutboundPostRequestBody outboundPostRequestBody);
     Outbound updateOutboundStatus(OutboundStatusPutRequestBody outboundStatusPutRequestBody);

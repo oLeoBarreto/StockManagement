@@ -1,7 +1,9 @@
 package com.barreto.stockmanagement.domains.documents;
 
 import com.barreto.stockmanagement.domains.AbstractDomain;
+import com.barreto.stockmanagement.domains.Company;
 import com.barreto.stockmanagement.domains.Product;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -28,9 +30,15 @@ public class Outbound extends AbstractDomain {
 
     private DocumentStatus status;
 
-    public Outbound(Product product, Float quantity) {
+    @NotNull(message = "Company id could not be null")
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "company_id")
+    private Company company;
+
+    public Outbound(Product product, Float quantity, Company company) {
         this.product = product;
         this.quantity = quantity;
         this.status = DocumentStatus.WAITING;
+        this.company = company;
     }
 }

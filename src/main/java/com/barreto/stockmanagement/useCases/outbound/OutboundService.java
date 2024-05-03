@@ -7,7 +7,9 @@ import com.barreto.stockmanagement.infra.DTOs.outbound.OutboundStatusPutRequestB
 import com.barreto.stockmanagement.infra.exceptions.BadRequestException;
 import com.barreto.stockmanagement.infra.DTOs.outbound.OutboundPostRequestBody;
 import com.barreto.stockmanagement.infra.database.repository.OutboundRepository;
+import com.barreto.stockmanagement.useCases.company.CompanyUseCase;
 import com.barreto.stockmanagement.useCases.product.ProductService;
+import com.barreto.stockmanagement.useCases.product.ProductUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,10 +19,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class OutboundService implements OutboundUseCase {
     private final OutboundRepository repository;
-    private final ProductService productService;
+    private final ProductUseCase productService;
+    private final CompanyUseCase companyService;
 
-    public Page<Outbound> listAll(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<Outbound> listAll(String companyId, Pageable pageable) {
+        return repository.findOutboundByCompanyId(companyId, pageable);
     }
 
     public Outbound findOutboundById(String id) {
@@ -29,7 +32,8 @@ public class OutboundService implements OutboundUseCase {
 
     public Outbound createNewOutbound(OutboundPostRequestBody outboundPostRequestBody) {
         Product product = productService.findProductById(outboundPostRequestBody.productId());
-        Outbound outbound = new Outbound(product, outboundPostRequestBody.quantity());
+        var company = companyService.findCompanyById(outboundPostRequestBody.companyId());
+        Outbound outbound = new Outbound(product, outboundPostRequestBody.quantity(), company);
 
         return repository.save(outbound);
     }

@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 public interface OutboundEndpoints {
-    ResponseEntity<Page<Outbound>> getOutboundList(Pageable pageable);
+    ResponseEntity<Page<Outbound>> getOutboundList(String companyId, Pageable pageable);
     ResponseEntity<Outbound> getOutboundById(String id);
     ResponseEntity<Outbound> postNewOutbound(OutboundPostRequestBody outboundPostRequestBody);
     ResponseEntity<Outbound> putInboundStatus(OutboundStatusPutRequestBody outboundStatusPutRequestBody);

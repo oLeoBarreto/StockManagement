@@ -19,8 +19,8 @@ public class OutboundController implements OutboundEndpoints {
     private final OutboundService outboundService;
 
     @GetMapping()
-    public ResponseEntity<Page<Outbound>> getOutboundList(Pageable pageable) {
-        return new ResponseEntity<>(outboundService.listAll(pageable), HttpStatus.OK);
+    public ResponseEntity<Page<Outbound>> getOutboundList(@RequestParam String companyId, Pageable pageable) {
+        return new ResponseEntity<>(outboundService.listAll(companyId, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/findById")
