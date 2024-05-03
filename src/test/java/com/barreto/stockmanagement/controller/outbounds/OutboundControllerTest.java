@@ -61,13 +61,14 @@ class OutboundControllerTest {
 
         Outbound outbound = new Outbound(
                 product,
-                1F
+                1F,
+                company
         );
 
         PageImpl<Outbound> outboundPage = new PageImpl<>(List.of(outbound));
 
         when(outboundService.createNewOutbound(any(OutboundPostRequestBody.class))).thenReturn(outbound);
-        when(outboundService.listAll(any(Pageable.class))).thenReturn(outboundPage);
+        when(outboundService.listAll(anyString(), any(Pageable.class))).thenReturn(outboundPage);
         when(outboundService.findOutboundById(anyString())).thenReturn(outbound);
         when(outboundService.updateOutboundStatus(any(OutboundStatusPutRequestBody.class))).thenReturn(outbound);
         doNothing().when(outboundService).deleteOutbound(anyString());
@@ -78,7 +79,7 @@ class OutboundControllerTest {
     @Test
     @DisplayName("Should get a page of existing outbounds")
     void testGetOutboundList() {
-        ResponseEntity<Page<Outbound>> outbound = outboundController.getOutboundList(PageRequest.of(0, 10));
+        ResponseEntity<Page<Outbound>> outbound = outboundController.getOutboundList("companyId", PageRequest.of(0, 10));
 
         assertNotNull(outbound.getBody());
         assertEquals(HttpStatus.OK, outbound.getStatusCode());
@@ -99,7 +100,8 @@ class OutboundControllerTest {
     void testPostNewOutbound() {
         OutboundPostRequestBody outboundPostRequestBody = new OutboundPostRequestBody(
                 1F,
-                "productId"
+                "productId",
+                "companyId"
         );
 
         ResponseEntity<Outbound> outbound = outboundController.postNewOutbound(outboundPostRequestBody);

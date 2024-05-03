@@ -7,6 +7,8 @@ import com.barreto.stockmanagement.domains.Product;
 import com.barreto.stockmanagement.infra.DTOs.outbound.OutboundPostRequestBody;
 import com.barreto.stockmanagement.infra.DTOs.outbound.OutboundStatusPutRequestBody;
 import com.barreto.stockmanagement.infra.database.repository.OutboundRepository;
+import com.barreto.stockmanagement.useCases.company.CompanyService;
+import com.barreto.stockmanagement.useCases.company.CompanyUseCase;
 import com.barreto.stockmanagement.useCases.product.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,6 +41,9 @@ class OutboundServiceTest {
     @Mock
     private ProductService productService;
 
+    @Mock
+    private CompanyService companyService;
+
     @InjectMocks
     private OutboundService outboundService;
 
@@ -68,16 +73,20 @@ class OutboundServiceTest {
 
         Outbound outbound = new Outbound(
                 product,
-                1F
+                1F,
+                company
         );
         outbound.id = "outboundId";
 
         PageImpl<Outbound> outboundPage = new PageImpl<>(List.of(outbound));
 
         when(repository.findAll(any(Pageable.class))).thenReturn(outboundPage);
+        when(repository.findOutboundByCompanyId(anyString(), any(Pageable.class))).thenReturn(outboundPage);
         when(repository.findById(anyString())).thenReturn(Optional.of(outbound));
         when(repository.save(any(Outbound.class))).thenReturn(outbound);
         doNothing().when(repository).delete(any(Outbound.class));
+
+        when(companyService.findCompanyById(anyString())).thenReturn(company);
 
         MockitoAnnotations.openMocks(this);
     }
@@ -87,11 +96,12 @@ class OutboundServiceTest {
     void testListAllOutbound() {
         OutboundPostRequestBody outboundPostRequestBody = new OutboundPostRequestBody(
                 1F,
-                "productId"
+                "productId",
+                "companyId"
         );
         outboundService.createNewOutbound(outboundPostRequestBody);
 
-        Page<Outbound> outboundPage = outboundService.listAll(PageRequest.of(0, 10));
+        Page<Outbound> outboundPage = outboundService.listAll("companyId", PageRequest.of(0, 10));
 
         assertFalse(outboundPage.getContent().isEmpty());
     }
@@ -101,7 +111,8 @@ class OutboundServiceTest {
     void testFindOutboundById() {
         OutboundPostRequestBody outboundPostRequestBody = new OutboundPostRequestBody(
                 1F,
-                "productId"
+                "productId",
+                "companyId"
         );
         Outbound createdOutbound = outboundService.createNewOutbound(outboundPostRequestBody);
 
@@ -116,7 +127,8 @@ class OutboundServiceTest {
     void testCreateNewOutbound() {
         OutboundPostRequestBody outboundPostRequestBody = new OutboundPostRequestBody(
                 1F,
-                "productId"
+                "productId",
+                "companyId"
         );
         Outbound outbound = outboundService.createNewOutbound(outboundPostRequestBody);
 
@@ -131,7 +143,8 @@ class OutboundServiceTest {
     void testChangeDocStatus() {
         OutboundPostRequestBody outboundPostRequestBody = new OutboundPostRequestBody(
                 1F,
-                "productId"
+                "productId",
+                "companyId"
         );
         Outbound outbound = outboundService.createNewOutbound(outboundPostRequestBody);
 
@@ -146,7 +159,8 @@ class OutboundServiceTest {
     void testDeleteOutbound() {
         OutboundPostRequestBody outboundPostRequestBody = new OutboundPostRequestBody(
                 1F,
-                "productId"
+                "productId",
+                "companyId"
         );
         Outbound outbound = outboundService.createNewOutbound(outboundPostRequestBody);
 
