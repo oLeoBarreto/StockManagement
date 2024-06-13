@@ -1,5 +1,7 @@
 package com.barreto.stockmanagement.infra.DTOs.user;
 
-public record UserLoginResponseBody(String token) {
+import com.barreto.stockmanagement.domains.user.User;
+
+public record UserLoginResponseBody(String token, User user) {
 
 }

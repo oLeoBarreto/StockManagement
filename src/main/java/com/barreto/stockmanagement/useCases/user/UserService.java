@@ -30,7 +30,7 @@ public class UserService implements UserUseCase {
         UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(user.login(), user.password());
         Authentication authenticate = this.authenticationManager.authenticate(usernamePassword);
 
-        return new UserLoginResponseBody(tokenManageService.generateToken((User) authenticate.getPrincipal()));
+        return new UserLoginResponseBody(tokenManageService.generateToken((User) authenticate.getPrincipal()), (User) authenticate.getPrincipal());
     }
 
     public User registerUser(UserRegisterRequestBody user) {

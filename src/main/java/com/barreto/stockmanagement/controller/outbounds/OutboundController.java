@@ -34,7 +34,7 @@ public class OutboundController implements OutboundEndpoints {
     }
 
     @PutMapping("/status")
-    public ResponseEntity<Outbound> putInboundStatus(OutboundStatusPutRequestBody outboundStatusPutRequestBody) {
+    public ResponseEntity<Outbound> putInboundStatus(@RequestBody @Valid OutboundStatusPutRequestBody outboundStatusPutRequestBody) {
         return new ResponseEntity<>(outboundService.updateOutboundStatus(outboundStatusPutRequestBody), HttpStatus.OK);
     }
 
