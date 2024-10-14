@@ -33,3 +33,4 @@ api:
       secret: ${JWT_SECRET:my-secret-key}
   files:
     uploadDir: ${UPLOAD_DIR:src/main/resources/static/images/uploads}
+  version: "2.0.0"
