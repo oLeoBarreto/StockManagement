@@ -6,6 +6,7 @@ import com.barreto.stockmanagement.infra.config.utils.FileStorage;
 import com.barreto.stockmanagement.infra.database.repository.ProductRepository;
 import com.barreto.stockmanagement.infra.exceptions.BadRequestException;
 import com.barreto.stockmanagement.infra.exceptions.ImageNotFoundException;
+import com.barreto.stockmanagement.infra.providers.DiskStorageProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,8 @@ class ProductImageServiceTest {
     private ProductRepository repository;
     @Mock
     private FileStorage fileStorage;
+    @Mock
+    private DiskStorageProvider diskStorageProvider;
     @InjectMocks
     private ProductImageService productImageService;
 
@@ -59,7 +62,10 @@ class ProductImageServiceTest {
 
         when(productService.findProductById(anyString())).thenReturn(product);
         when(repository.save(any(Product.class))).thenReturn(product);
-        when(fileStorage.getUploadDir()).thenReturn("src/test/resources/static/images/uploads");
+        when(fileStorage.getUploadDiretory()).thenReturn("src/test/resources/static/images/uploads");
+        when(diskStorageProvider.uploadFile(any(MultipartFile.class), anyString())).thenReturn("image-productId.jpeg");
+        when(diskStorageProvider.downloadFile(anyString())).thenReturn("test".getBytes());
+        doNothing().when(diskStorageProvider).deleteFile(anyString());
 
         MockitoAnnotations.openMocks(this);
     }
