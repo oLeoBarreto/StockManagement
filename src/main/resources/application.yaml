@@ -7,7 +7,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/StockManagement
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/StockManagement}
     username: postgres
     password: docker
     driver-class-name: org.postgresql.Driver
@@ -17,10 +17,10 @@ spring:
   application:
     name: stock-management-api
   rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
     listener:
       direct:
         auto-startup: true
@@ -31,6 +31,14 @@ api:
   security:
     token:
       secret: ${JWT_SECRET:my-secret-key}
-  files:
-    uploadDir: ${UPLOAD_DIR:src/main/resources/static/images/uploads}
+  storage:
+    driver: ${STORAGE_DRIVER:disk}
+    directory: ${DIR_STORAGE:src/main/resources/static}
+    folder: ${FOLDER_STORAGE:images/uploads}
   version: "2.0.0"
+
+aws:
+  access-key: ${AWS_ACCESS_KEY}
+  secret-key: ${AWS_SECRET_KEY}
+  s3:
+    bucket-name: ${AWS_S3_BUCKET_NAME}

@@ -7,6 +7,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Data
 public class FileStorage {
-    @Value("${api.files.uploadDir}")
-    private String UploadDir;
+    @Value("${api.storage.directory}")
+    private String uploadDiretory;
+    @Value("${api.storage.folder}")
+    private String uploadFolder;
+    private String UploadPath;
+
+    public String getUploadPath() {
+        return uploadDiretory + "/" + uploadFolder;
+    }
 }
