@@ -38,3 +38,10 @@ build/
 ### images ###
 /src/main/resources/static/images
 /src/test/resources/static/images
+
+### terraform ###
+/InfraAsCode/s3-bucket-object/.terraform
+/InfraAsCode/s3-bucket-object/terraform.tfstate
+/InfraAsCode/s3-bucket-object/.terraform.lock.hcl
+/InfraAsCode/s3-bucket-object/terraform.tfstate.backup
+/InfraAsCode/s3-bucket-object/product
